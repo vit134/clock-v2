@@ -86,6 +86,8 @@ class AlarmAdd extends Component {
                     title={'Alarm'} 
                     rightAction={this.saveAlarm.bind(this)} 
                     rightTitle={'Save'}
+                    leftAction={() => Actions.pop()} 
+                    leftTitle={'Cancel'}
                     color={gs.topButtons.color}
                 />
                 <Content>

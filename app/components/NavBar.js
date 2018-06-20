@@ -14,13 +14,13 @@ export default class NavBar extends Component {
         return(
             <Header style={styles.container}>
                 <Left>
-                    {this.props.leftAction && <Button color={'#fc363b'} onPress={this.props.leftAction} title={this.props.leftTitle} />}
+                    {this.props.leftTitle && <Button color={'#fc363b'} onPress={this.props.leftAction} title={this.props.leftTitle} />}
                 </Left>
                 <Body>
                     <Title>{this.props.title}</Title>
                 </Body>
                 <Right>
-                    {this.props.rightAction && <Button color={'#fc363b'} onPress={this.props.rightAction} title={this.props.rightTitle} />}
+                    {this.props.rightTitle && <Button color={'#fc363b'} onPress={this.props.rightAction} title={this.props.rightTitle} />}
                 </Right>
             </Header>
         )
