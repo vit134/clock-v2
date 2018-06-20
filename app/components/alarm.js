@@ -5,65 +5,65 @@ import {
     StyleSheet,
     FlatList,
     View,
-    Text,
     Switch,
     ActivityIndicator,
     Button
 } from 'react-native';
 
+import { Container, Header, Title, Content, Footer, FooterTab, Left, Right, Body, Icon, Text } from 'native-base';
 
 import { Actions } from 'react-native-router-flux';
 
-import {bindActionCreators} from 'redux';
+import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import store from '../store';
-
 import * as ActionsRedux from '../actions';
+
+import gs from 'globalStyles';
+import NavBar from './NavBar';
 
 class Alarm extends Component {
     constructor(props) {
         super(props);
-
         this.state = {};
-        
-
         this.unsubscribe = store.subscribe(() => console.log(store.getState()));
-
         this.renderItem = this.renderItem.bind(this);
     }
 
     componentDidMount() {
         this.props.getData();
-        console.log('alarm store', store.getState());
     }
 
     render() {
-        if (this.props.loading) {
-            return (
-                <View style={styles.activityIndicatorContainer}>
-                    <ActivityIndicator animating={true}/>
-                </View>
-            );
-        } else {
-            return (
-                <View style={{flex:1, backgroundColor: '#F5F5F5', paddingTop:20}}>
-                    <FlatList
-                        ref='listRef'
-                        data={this.props.data}
-                        renderItem={this.renderItem}
-                        keyExtractor={(item, index) => index}/>
-                    <Button
-                        onPress={() => Actions.alarmAdd()}
-                        title="Add alarm"
-                        color="#841584"
-                    />
-                </View>
-            );
-        }
+        return (
+            <Container style={gs.container}>
+                <NavBar 
+                    title={'Alarm'} 
+                    rightAction={() => Actions.alarmAdd()} 
+                    rightTitle={'Add'}
+                    color={gs.topButtons.color}
+                />
+                { this.props.loading 
+                ? 
+                    <View style={styles.activityIndicatorContainer}>
+                        <ActivityIndicator animating={true}/>
+                    </View>
+                :
+                    <View>
+                        <FlatList
+                            ref='listRef'
+                            data={this.props.data}
+                            renderItem={this.renderItem}
+                            keyExtractor={(item, index) => item.id}
+                        />
+                    </View>
+                }
+            </Container>
+        )
     }
 
     renderItem({item, index}) {
-        return <AlarmItem {...item} />
+        return <AlarmItem {...item}/>
     }
 };
 

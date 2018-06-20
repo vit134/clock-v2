@@ -8,10 +8,14 @@ import {
     TextInput,
     Button
 } from 'react-native';
+import { Container, Content } from 'native-base';
 
 import { Scene, Actions } from 'react-native-router-flux';
 import * as dataReducer from '../actions';
 import store from '../store';
+
+import gs from 'globalStyles';
+import NavBar from './NavBar';
 
 class SwitchComp extends Component {
     constructor(props) {
@@ -77,31 +81,39 @@ class AlarmAdd extends Component {
 
     render() {
         return (
-            <View style={styles.container}>
-                <DatePickerIOS
-                    date={this.state.time}
-                    onDateChange={this.setDate}
-                    mode={'time'}
-                    style={styles.datePicker}
+            <Container style={gs.container}>
+                <NavBar 
+                    title={'Alarm'} 
+                    rightAction={this.saveAlarm.bind(this)} 
+                    rightTitle={'Save'}
+                    color={gs.topButtons.color}
                 />
-                <View style={styles.row}>
-                    <View><Text style={styles.rowText}>Title</Text></View>
-                    <View>
-                        <Text onPress={() => Actions.alarmTitleModal({updateTitle: this.updateTitle, title: this.state.title})}>{this.state.title}</Text>
+                <Content>
+                    <DatePickerIOS
+                        date={this.state.time}
+                        onDateChange={this.setDate}
+                        mode={'time'}
+                        style={styles.datePicker}
+                    />
+                    <View style={styles.row}>
+                        <View><Text style={styles.rowText}>Title</Text></View>
+                        <View>
+                            <Text onPress={() => Actions.alarmTitleModal({updateTitle: this.updateTitle, title: this.state.title})}>{this.state.title}</Text>
+                        </View>
                     </View>
-                </View>
-                <View style={styles.row}>
-                    <View><Text style={styles.rowText}>Repeat song</Text></View>
-                    <View>
-                        <SwitchComp/>
+                    <View style={styles.row}>
+                        <View><Text style={styles.rowText}>Repeat song</Text></View>
+                        <View>
+                            <SwitchComp/>
+                        </View>
                     </View>
-                </View>
-                <Button
+                    <Button
                         onPress={this.saveAlarm.bind(this)}
                         title="Save Alarm"
                         color="#841584"
                     />
-            </View>
+                </Content>
+            </Container>
         );
     }
 }

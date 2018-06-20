@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Provider } from 'react-redux';
 import { Router, Scene } from 'react-native-router-flux';
 import { StyleSheet } from 'react-native';
-import { Container, Header, Title, Content, Footer, FooterTab, Button, Left, Right, Body, Icon, Text } from 'native-base';
+import { Icon } from 'native-base';
 
 import store from './app/store'; //Import the store
 import Alarm from './app/components/alarm' //Import the component file

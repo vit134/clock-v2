@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { Header, Title, Left, Right, Body, Text } from 'native-base';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Button } from 'react-native';
+
+import { Actions } from 'react-native-router-flux';
 
 export default class NavBar extends Component {
     constructor(props) {
@@ -8,13 +10,18 @@ export default class NavBar extends Component {
     }
 
     render() {
+        console.log(this.props)
         return(
             <Header style={styles.container}>
-                <Left><Text style={styles.buttons}>Reft</Text></Left>
+                <Left>
+                    {this.props.leftAction && <Button color={'#fc363b'} onPress={this.props.leftAction} title={this.props.leftTitle} />}
+                </Left>
                 <Body>
                     <Title>{this.props.title}</Title>
                 </Body>
-                <Right><Text style={styles.buttons}>Right</Text></Right>
+                <Right>
+                    {this.props.rightAction && <Button color={'#fc363b'} onPress={this.props.rightAction} title={this.props.rightTitle} />}
+                </Right>
             </Header>
         )
     }
