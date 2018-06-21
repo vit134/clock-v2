@@ -34,6 +34,7 @@ class AlarmAdd extends Component {
         
         this.setDate = this.setDate.bind(this);
         this.updateRepeat = this.updateRepeat.bind(this);
+        this.prepareRepeatTitle = this.prepareRepeatTitle.bind(this);
     }
 
     updateTitle = (value) => {
@@ -44,7 +45,8 @@ class AlarmAdd extends Component {
 
     updateRepeat(value) {
         this.setState({
-            repeat: value 
+            repeat: value,
+            repeatTitle: this.prepareRepeatTitle()
         })
     }
 
@@ -71,7 +73,7 @@ class AlarmAdd extends Component {
 
         const prepareResult = () => {
             let str = '';
-            result.forEach((el, i) => str += i < result.length - 1 ? `${el},` : el);
+            result.forEach((el, i) => str += i < result.length - 1 ? `${el} ` : el);
             return str;
         }
 
@@ -98,15 +100,13 @@ class AlarmAdd extends Component {
             result = [...arr];
         }
 
-        //this.setState({repeatTitle: prepareResult()})
-
         return prepareResult();
+        
     }
 
     saveAlarm() {
         let newAlarm = this.state;
         newAlarm.time = `${newAlarm.time.getHours()}:${newAlarm.time.getMinutes()}`
-        newAlarm.repeatTitle = this.prepareRepeatTitle();
         store.dispatch(addAlarm(newAlarm));
         Actions.pop();
     }
@@ -138,7 +138,7 @@ class AlarmAdd extends Component {
                         <View><Text style={styles.rowText}>Repeat</Text></View>
                         <View>
                             <View style={styles.rowRightText}>
-                                <Text>{this.state.repeat.length > 0 ? this.prepareRepeatTitle() : 'Never'}</Text>
+                                <Text>{this.state.repeat.length > 0 ? this.state.repeatTitle : 'Never'}</Text>
                                 <Icon name={'ios-arrow-forward'} style={styles.arrowIcon}/>
                             </View>
                         </View>

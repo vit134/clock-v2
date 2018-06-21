@@ -99,7 +99,8 @@ class AlarmRepeatModal extends Component {
                                                 checkedColor='#fc363b'
                                                 iconType='ionicon'
                                                 checkedIcon='md-checkmark'
-                                                uncheckedIcon={''}
+                                                uncheckedIcon={'md-checkmark'}
+                                                uncheckedColor={'#fff'}
                                                 checked={this.state.checked.indexOf(item.value) !== -1}
                                                 containerStyle={styles.checkBox}
                                             />
