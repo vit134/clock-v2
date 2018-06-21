@@ -26,7 +26,7 @@ class Alarm extends Component {
     constructor(props) {
         super(props);
         this.state = {};
-        this.unsubscribe = store.subscribe(() => console.log(store.getState()));
+        this.unsubscribe = store.subscribe(() => {});
         this.renderItem = this.renderItem.bind(this);
     }
 
@@ -41,7 +41,7 @@ class Alarm extends Component {
                     title={'Alarm'} 
                     rightAction={() => Actions.alarmAdd()} 
                     rightTitle={'Add'}
-                    color={gs.topButtons.color}
+                    leftTitle={'Change'}
                 />
                 { this.props.loading 
                 ? 
@@ -54,7 +54,7 @@ class Alarm extends Component {
                             ref='listRef'
                             data={this.props.data}
                             renderItem={this.renderItem}
-                            keyExtractor={(item, index) => item.id}
+                            keyExtractor={(item, index) => item.id.toString()}
                         />
                     </View>
                 }
@@ -84,7 +84,7 @@ class AlarmItem extends Component {
         <View style={styles.alarmItem}>
           <View>
             <Text style={styles.alarmItemTime}>{this.props.time}</Text>
-            <Text style={styles.alarmItemTitle}>{this.props.title}</Text>
+            <Text style={styles.alarmItemTitle}>{this.props.title} {this.props.repeatTitle ? `, ${this.props.repeatTitle}` : ''}</Text>
           </View>
           <View>
             <Switch style={styles.alarmItemSwitch} onValueChange={this.toggleSwitch.bind(this)} value = {this.state.switchEnabled}/>

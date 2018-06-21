@@ -4,37 +4,19 @@ import {
     Text,
     View,
     DatePickerIOS,
-    Switch,
     TextInput,
-    Button
+    Button,
+    TouchableOpacity
 } from 'react-native';
-import { Container, Content } from 'native-base';
+import { Container, Content, Icon } from 'native-base';
 
 import { Scene, Actions } from 'react-native-router-flux';
-import * as dataReducer from '../actions';
+import { addAlarm } from '../actions';
 import store from '../store';
 
 import gs from 'globalStyles';
 import NavBar from './NavBar';
-
-class SwitchComp extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            switchEnabled: this.props.enabled,
-        }
-    }
-    
-    toggleSwitch(value) {
-        this.setState({switchEnabled: value})
-    }
-
-    render(){
-        return (
-            <Switch onValueChange={this.toggleSwitch.bind(this)} value = {this.state.switchEnabled}/>
-        )
-    }
-}
+import Switch from './Switch';
 
 class AlarmAdd extends Component {
     constructor(props) {
@@ -44,15 +26,25 @@ class AlarmAdd extends Component {
             id: data[data.length - 1].id + 1,
             time: new Date(),
             title: 'Alarm',
-            enabled: true
+            enabled: true,
+            repeatSong: false,
+            repeat: [],
+            repeatTitle: ''
         };
         
         this.setDate = this.setDate.bind(this);
+        this.updateRepeat = this.updateRepeat.bind(this);
     }
 
     updateTitle = (value) => {
         this.setState({
             title: value 
+        })
+    }
+
+    updateRepeat(value) {
+        this.setState({
+            repeat: value 
         })
     }
 
@@ -66,16 +58,56 @@ class AlarmAdd extends Component {
         });
     }
 
+    prepareRepeatTitle() {
+        const arr = this.state.repeat;
+        const onlyWeekend = ['Sa', 'Su'];
+        const onlyWeekdays = ['Mo', 'Tu', 'We', 'Th', 'Fr'];
+
+        let result = [];
+
+        const isBigEnough = (el) => {
+            return arr.indexOf(el) > -1;
+        }
+
+        const prepareResult = () => {
+            let str = '';
+            result.forEach((el, i) => str += i < result.length - 1 ? `${el},` : el);
+            return str;
+        }
+
+        if (arr.length < 1) return 'Never';
+        if (arr.length === 7) return 'Every day';
+
+        if (arr.length === onlyWeekend.length) {
+            if (onlyWeekend.every(isBigEnough)) {
+                return 'All weekend';
+            } else {
+                result = [...arr];
+            }
+        } else {
+            result = [...arr];
+        }
+
+        if (arr.length === onlyWeekdays.length) {
+            if (onlyWeekdays.every(isBigEnough)) {
+                return 'All weekdays';
+            } else {
+                result = [...arr];
+            }
+        } else {
+            result = [...arr];
+        }
+
+        //this.setState({repeatTitle: prepareResult()})
+
+        return prepareResult();
+    }
+
     saveAlarm() {
-
         let newAlarm = this.state;
-
         newAlarm.time = `${newAlarm.time.getHours()}:${newAlarm.time.getMinutes()}`
-
-        store.dispatch({
-            type: 'ADD_ALARM',
-            newAlarm: newAlarm
-        });
+        newAlarm.repeatTitle = this.prepareRepeatTitle();
+        store.dispatch(addAlarm(newAlarm));
         Actions.pop();
     }
 
@@ -83,12 +115,11 @@ class AlarmAdd extends Component {
         return (
             <Container style={gs.container}>
                 <NavBar 
-                    title={'Alarm'} 
+                    title={'Alarm add'} 
                     rightAction={this.saveAlarm.bind(this)} 
                     rightTitle={'Save'}
                     leftAction={() => Actions.pop()} 
                     leftTitle={'Cancel'}
-                    color={gs.topButtons.color}
                 />
                 <Content>
                     <DatePickerIOS
@@ -97,6 +128,21 @@ class AlarmAdd extends Component {
                         mode={'time'}
                         style={styles.datePicker}
                     />
+                    <TouchableOpacity style={styles.row} onPress={() => 
+                        Actions.alarmRepeatModal({
+                            updateRepeat: this.updateRepeat,
+                            title: this.state.repeat,
+                            checked: this.state.repeat
+                        })
+                    }>
+                        <View><Text style={styles.rowText}>Repeat</Text></View>
+                        <View>
+                            <View style={styles.rowRightText}>
+                                <Text>{this.state.repeat.length > 0 ? this.prepareRepeatTitle() : 'Never'}</Text>
+                                <Icon name={'ios-arrow-forward'} style={styles.arrowIcon}/>
+                            </View>
+                        </View>
+                    </TouchableOpacity>
                     <View style={styles.row}>
                         <View><Text style={styles.rowText}>Title</Text></View>
                         <View>
@@ -106,14 +152,9 @@ class AlarmAdd extends Component {
                     <View style={styles.row}>
                         <View><Text style={styles.rowText}>Repeat song</Text></View>
                         <View>
-                            <SwitchComp/>
+                            <Switch/>
                         </View>
                     </View>
-                    <Button
-                        onPress={this.saveAlarm.bind(this)}
-                        title="Save Alarm"
-                        color="#841584"
-                    />
                 </Content>
             </Container>
         );
@@ -145,6 +186,17 @@ const styles = StyleSheet.create({
     rowText: {
         color: '#222',
         fontSize: 14
+    },
+    rowRightText: {
+        display: 'flex', 
+        flexDirection: 'row', 
+        alignItems: 'center'
+    },
+    arrowIcon: {
+        fontSize: 20,
+        color: '#848484',
+        marginLeft: 10,
+        marginTop: 3
     }
 })
   

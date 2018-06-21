@@ -4,6 +4,8 @@
 
 import { StyleSheet } from 'react-native';
 
+export const colorRed = '#fc363b';
+
 export default globalStyles = StyleSheet.create({
     container: {
         flex: 1,

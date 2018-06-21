@@ -7,6 +7,8 @@ import { Icon } from 'native-base';
 import store from './app/store'; //Import the store
 import Alarm from './app/components/alarm' //Import the component file
 import AlarmAdd from './app/components/alarmAdd' //Import the component file
+import AlarmTitleModal from './app/components/alarmTitleModal' //Import the component file
+import AlarmRepeatModal from './app/components/alarmRepeatModal' //Import the component file
 
 const TabIcon = ({ focused, title, iconName }) => {
   const color = focused ? '#fc363b' : 'black';
@@ -28,8 +30,8 @@ export default class App extends Component {
                     <Scene key="alarm" initial title="Alarm" iconName="ios-alarm" icon={TabIcon} >
                       <Scene key="alarm" component={Alarm} title="Alarm" hideNavBar />
                       <Scene key="alarmAdd" component={AlarmAdd} title="Add alarm" hideNavBar />
-                      {/* <Scene key="alarmTitleModal" component={AlarmTitleModal} direction="vertical" title="Title" hideNavBar />
-                      <Scene key="alarmRepeatModal" component={AlarmRepeatModal} direction="vertical" hideNavBar /> */}
+                      <Scene key="alarmTitleModal" component={AlarmTitleModal} direction="vertical" title="Title" hideNavBar />
+                      <Scene key="alarmRepeatModal" component={AlarmRepeatModal} direction="vertical" hideNavBar />
                     </Scene>
                     {/* <Scene key="settings" title="Settings" iconName="ios-settings" icon={TabIcon}>
                       <Scene key="settings" component={Settings} title="Settings" />
