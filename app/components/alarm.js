@@ -1,5 +1,3 @@
-'use strict';
-
 import React, { Component } from 'react';
 import {
     StyleSheet,
@@ -7,10 +5,11 @@ import {
     View,
     Switch,
     ActivityIndicator,
-    Button
+    Button,
+    Text
 } from 'react-native';
 
-import { Container, Header, Title, Content, Footer, FooterTab, Left, Right, Body, Icon, Text } from 'native-base';
+import { Container, Content, Icon } from 'native-base';
 
 import { Actions } from 'react-native-router-flux';
 
@@ -43,21 +42,23 @@ class Alarm extends Component {
                     rightTitle={'Add'}
                     leftTitle={'Change'}
                 />
-                { this.props.loading 
-                ? 
-                    <View style={styles.activityIndicatorContainer}>
-                        <ActivityIndicator animating={true}/>
-                    </View>
-                :
-                    <View>
-                        <FlatList
-                            ref='listRef'
-                            data={this.props.data}
-                            renderItem={this.renderItem}
-                            keyExtractor={(item, index) => item.id.toString()}
-                        />
-                    </View>
-                }
+                <Content>
+                    { this.props.loading 
+                    ? 
+                        <View style={styles.activityIndicatorContainer}>
+                            <ActivityIndicator animating={true}/>
+                        </View>
+                    :
+                        <View>
+                            <FlatList
+                                ref='listRef'
+                                data={this.props.data}
+                                renderItem={this.renderItem}
+                                keyExtractor={(item, index) => item.id.toString()}
+                            />
+                        </View>
+                    }
+                </Content>
             </Container>
         )
     }
