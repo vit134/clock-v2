@@ -1,5 +1,6 @@
 export const DATA_AVAILABLE = 'DATA_AVAILABLE';
 export const ADD_ALARM = 'ADD_ALARM';
+export const REMOVE_ALARM = 'REMOVE_ALARM';
 
 //Import the sample data
 import Data from '../alarms';
@@ -17,5 +18,11 @@ export function getData(){
 export function addAlarm(newAlarm){
     return (dispatch) => {
         dispatch({type: ADD_ALARM, newAlarm: newAlarm});
+    };
+}
+
+export function removeAlarm(id){
+    return (dispatch) => {
+        dispatch({type: REMOVE_ALARM, id: id});
     };
 }

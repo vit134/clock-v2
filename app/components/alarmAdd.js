@@ -14,7 +14,7 @@ import { Scene, Actions } from 'react-native-router-flux';
 import { addAlarm } from '../actions';
 import store from '../store';
 
-import gs from 'globalStyles';
+import { gs } from 'globalStyles';
 import NavBar from './NavBar';
 import Switch from './Switch';
 
@@ -23,7 +23,7 @@ class AlarmAdd extends Component {
         super(props);
         let data  = store.getState().dataReducer.data;
         this.state = {
-            id: data[data.length - 1].id + 1,
+            id: data.length > 1 ? data[data.length - 1].id + 1 : 0,
             time: new Date(),
             title: 'Alarm',
             enabled: true,

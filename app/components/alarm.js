@@ -29,10 +29,17 @@ class Alarm extends Component {
         this.state = {};
         this.unsubscribe = store.subscribe(() => {});
         this.renderItem = this.renderItem.bind(this);
+        this.offScroll = this.offScroll.bind(this);
     }
 
     componentDidMount() {
         this.props.getData();
+    }
+
+    offScroll(value) {
+        this.setState({
+            isSwiping: value
+        })
     }
 
     render() {
@@ -44,7 +51,7 @@ class Alarm extends Component {
                     rightTitle={'Add'}
                     leftTitle={'Change'}
                 />
-                <Content scrollEnabled={!this.state.isSwiping}>
+                <Content scrollEnabled={!this.state.isSwiping} style={{minHeight: '100%'}}>
                     { this.props.loading 
                     ? 
                         <View style={styles.activityIndicatorContainer}>
@@ -66,39 +73,9 @@ class Alarm extends Component {
     }
 
     renderItem({item, index}) {
-        return <AlarmItem {...item}/>
+        return <AlarmItem {...item} offScroll={this.offScroll}/>
     }
 };
-
-const rightButtons = [
-    <TouchableHighlight 
-        style={{
-            flex: 1,
-            justifyContent: 'center',
-            paddingLeft: 20,
-            height: 80,
-            backgroundColor: colorRed,
-            borderColor: '#eee',
-            borderBottomWidth: 1
-        }}
-    ><Text style={{color: '#fff'}}>Delete</Text></TouchableHighlight>
-];
-
-const leftButtons = [
-    <TouchableHighlight 
-        style={{
-            flex: 1,
-            justifyContent: 'center',
-            alignItems: 'flex-end',
-            paddingRight: 20,
-            height: 80,
-            borderColor: '#eee',
-            borderBottomWidth: 1
-        }}
-    >
-        <Icon name={'ios-remove-circle'} style={{fontSize: 30, color: colorRed}} />
-    </TouchableHighlight>
-];
 
 class AlarmItem extends Component {
     constructor(props) {
@@ -111,15 +88,20 @@ class AlarmItem extends Component {
     toggleSwitch(value) {
         this.setState({switchEnabled: value});
     }
+
+    removeAlarm() {
+        store.dispatch(ActionsRedux.removeAlarm(this.props.id));
+        console.log(store.getState())
+    }
     
     render() {
         return (
             <Swipeable 
-                leftButtons={leftButtons} 
-                rightButtons={rightButtons} 
+                rightButtons={[<TouchableHighlight style={styles.swipeButtonRight}><Text style={styles.swipeButtonText} onPress={this.removeAlarm.bind(this)}>Delete</Text></TouchableHighlight>]} 
+                leftButtons={[<TouchableHighlight style={styles.swipeButtonLeft}><Icon name={'ios-remove-circle'} style={{fontSize: 30, color: colorRed}} /></TouchableHighlight>]} 
                 rightButtonWidth={80}
-                /* onSwipeStart={() => this.setState({isSwiping: true})}
-                onSwipeRelease={() => this.setState({isSwiping: false})} */
+                onSwipeStart={() => this.props.offScroll(true)}
+                onSwipeRelease={() => this.props.offScroll(false)}
             >
                 <View style={styles.alarmItem}>
                     <View>
@@ -176,12 +158,23 @@ let styles = StyleSheet.create({
         marginTop: 10,
         //transform: [{scaleX: 1}, {scaleY: 1.2}]
     },
-    swipeButton: {
+    swipeButtonRight: {
         flex: 1,
         justifyContent: 'center',
         paddingLeft: 20,
         height: 80,
-        backgroundColor: colorRed
+        backgroundColor: colorRed,
+        borderColor: '#eee',
+        borderBottomWidth: 1
+    },
+    swipeButtonLeft: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'flex-end',
+        paddingRight: 20,
+        height: 80,
+        borderColor: '#eee',
+        borderBottomWidth: 1
     },
     swipeButtonText: {
         color: '#fff'
