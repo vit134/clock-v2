@@ -8,7 +8,9 @@ import {
     Button,
     Text,
     Animated,
-    TouchableHighlight
+    TouchableHighlight,
+    ScrollView,
+    AsyncStorage
 } from 'react-native';
 
 import { Container, Content, Icon } from 'native-base';
@@ -41,38 +43,63 @@ class Alarm extends Component {
             isSwiping: value
         })
     }
+    
+    async getKey() {
+        console.log('get key');
+        try {
+            const value = await AsyncStorage.getItem('@MySuperStore:key');
+            this.setState({myKey: value});
+            console.log(value);
+        } catch (error) {
+            console.log("Error retrieving data" + error);
+        }
+    }
+    
+    async saveKey(value) {
+        console.log('save key');
+        try {
+            await AsyncStorage.setItem('@MySuperStore:key', value);
+            console.log('key was saved');
+        } catch (error) {
+            console.log("Error saving data" + error);
+        }
+    }
 
     render() {
         return (
             <Container style={gs.container}>
                 <NavBar 
                     title={'Alarm'} 
-                    rightAction={() => Actions.alarmAdd()} 
+                    rightAction={() => Actions.alarmAdd({new: true})} 
                     rightTitle={'Add'}
                     leftTitle={'Change'}
                 />
-                <Content scrollEnabled={!this.state.isSwiping} style={{minHeight: '100%'}}>
+                <ScrollView scrollEnabled={!this.state.isSwiping} style={{minHeight: '100%'}}>
                     { this.props.loading 
                     ? 
                         <View style={styles.activityIndicatorContainer}>
                             <ActivityIndicator animating={true}/>
                         </View>
                     :
-                        <View>
-                            <FlatList
-                                ref='listRef'
-                                data={this.props.data}
-                                renderItem={this.renderItem}
-                                keyExtractor={(item, index) => item.id.toString()}
-                            />
-                        </View>
+                        
+                        <FlatList
+                            ref='listRef'
+                            data={this.props.data}
+                            renderItem={this.renderItem}
+                            keyExtractor={(item, index) => {
+                                //console.log(item);
+                                return item.id.toString()
+                            }}
+                        />
                     }
-                </Content>
+                    <Button onPress={() => this.saveKey([])} title={'save key'} />
+                    <Button onPress={this.getKey.bind(this)} title={'get key'} />
+                </ScrollView>
             </Container>
         )
     }
 
-    renderItem({item, index}) {
+    renderItem({item, index}) { 
         return <AlarmItem {...item} offScroll={this.offScroll}/>
     }
 };
@@ -91,21 +118,24 @@ class AlarmItem extends Component {
 
     removeAlarm() {
         store.dispatch(ActionsRedux.removeAlarm(this.props.id));
-        console.log(store.getState())
+    }
+
+    changeAlarm() {
+        Actions.alarmAdd({new: false, ...this.props});
     }
     
     render() {
         return (
             <Swipeable 
-                rightButtons={[<TouchableHighlight style={styles.swipeButtonRight}><Text style={styles.swipeButtonText} onPress={this.removeAlarm.bind(this)}>Delete</Text></TouchableHighlight>]} 
-                leftButtons={[<TouchableHighlight style={styles.swipeButtonLeft}><Icon name={'ios-remove-circle'} style={{fontSize: 30, color: colorRed}} /></TouchableHighlight>]} 
+                rightButtons={[<TouchableHighlight style={styles.swipeButtonRight} onPress={this.removeAlarm.bind(this)}><Text style={styles.swipeButtonText}>Delete</Text></TouchableHighlight>]} 
+                leftButtons={[<TouchableHighlight style={styles.swipeButtonLeft} onPress={this.changeAlarm.bind(this)}><Icon name={'ios-remove-circle'} style={{fontSize: 30, color: colorRed}} /></TouchableHighlight>]} 
                 rightButtonWidth={80}
                 onSwipeStart={() => this.props.offScroll(true)}
                 onSwipeRelease={() => this.props.offScroll(false)}
             >
                 <View style={styles.alarmItem}>
                     <View>
-                        <Text style={styles.alarmItemTime}>{this.props.time}</Text>
+                        <Text style={styles.alarmItemTime}>{this.props.timeTitle}</Text>
                         <Text style={styles.alarmItemTitle}>{this.props.title} {this.props.repeatTitle ? `, ${this.props.repeatTitle}` : ''}</Text>
                     </View>
                     <View>
@@ -138,7 +168,8 @@ let styles = StyleSheet.create({
     alarmItem: {
         borderColor: '#eee',
         borderBottomWidth: 1,
-        height: 80,
+        height: 85,
+        paddingTop: 7,
         paddingHorizontal: 20,
         width: '100%',
         display: 'flex',
@@ -162,7 +193,7 @@ let styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         paddingLeft: 20,
-        height: 80,
+        height: 85,
         backgroundColor: colorRed,
         borderColor: '#eee',
         borderBottomWidth: 1

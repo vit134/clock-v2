@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux';
  
-import { DATA_AVAILABLE, ADD_ALARM, REMOVE_ALARM } from "../actions/" //Import the actions types constant we defined in our actions
+import { DATA_AVAILABLE, ADD_ALARM, REMOVE_ALARM, CHANGE_ALARM } from "../actions/" //Import the actions types constant we defined in our actions
  
 let dataState = { data: [], loading:true };
  
@@ -14,6 +14,15 @@ const dataReducer = (state = dataState, action) => {
             return state;
         case REMOVE_ALARM:
             state = Object.assign({}, state, { data: state.data.filter(el => el.id !== action.id) });
+            return state;
+        case CHANGE_ALARM:
+            state = Object.assign({}, state, { data: state.data.map(el => {
+                if (el.id === action.id) {
+                    return action.changingAlarm
+                } else {
+                    return el;
+                }
+            })});
             return state;
         default:
             return state;

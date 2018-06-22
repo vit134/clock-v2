@@ -17,8 +17,33 @@ const TabIcon = ({ focused, title, iconName }) => {
     <Icon name={iconName} size={30} color={color} />
   );
 }
+    
+async function getKey() {
+    console.log('get key');
+    try {
+        const value = await AsyncStorage.getItem('@MySuperStore:key');
+        this.setState({myKey: value});
+        console.log(value);
+    } catch (error) {
+        console.log("Error retrieving data" + error);
+    }
+}
+
+async function saveKey(value) {
+    console.log('save key');
+    try {
+        await AsyncStorage.setItem('@MySuperStore:key', value);
+        console.log('key was saved');
+    } catch (error) {
+        console.log("Error saving data" + error);
+    }
+}
 
 export default class App extends Component {
+    constructor() {
+      
+    }
+
     render() {
         return (
             <Provider store={store}>
