@@ -6,11 +6,13 @@ import {
     Switch,
     ActivityIndicator,
     Button,
-    Text
+    Text,
+    Animated,
+    TouchableHighlight
 } from 'react-native';
 
 import { Container, Content, Icon } from 'native-base';
-
+import Swipeable from 'react-native-swipeable';
 import { Actions } from 'react-native-router-flux';
 
 import { bindActionCreators } from 'redux';
@@ -18,7 +20,7 @@ import { connect } from 'react-redux';
 import store from '../store';
 import * as ActionsRedux from '../actions';
 
-import gs from 'globalStyles';
+import { gs , colorRed } from 'globalStyles';
 import NavBar from './NavBar';
 
 class Alarm extends Component {
@@ -42,7 +44,7 @@ class Alarm extends Component {
                     rightTitle={'Add'}
                     leftTitle={'Change'}
                 />
-                <Content>
+                <Content scrollEnabled={!this.state.isSwiping}>
                     { this.props.loading 
                     ? 
                         <View style={styles.activityIndicatorContainer}>
@@ -68,30 +70,68 @@ class Alarm extends Component {
     }
 };
 
+const rightButtons = [
+    <TouchableHighlight 
+        style={{
+            flex: 1,
+            justifyContent: 'center',
+            paddingLeft: 20,
+            height: 80,
+            backgroundColor: colorRed,
+            borderColor: '#eee',
+            borderBottomWidth: 1
+        }}
+    ><Text style={{color: '#fff'}}>Delete</Text></TouchableHighlight>
+];
+
+const leftButtons = [
+    <TouchableHighlight 
+        style={{
+            flex: 1,
+            justifyContent: 'center',
+            alignItems: 'flex-end',
+            paddingRight: 20,
+            height: 80,
+            borderColor: '#eee',
+            borderBottomWidth: 1
+        }}
+    >
+        <Icon name={'ios-remove-circle'} style={{fontSize: 30, color: colorRed}} />
+    </TouchableHighlight>
+];
+
 class AlarmItem extends Component {
     constructor(props) {
-      super(props);
-      this.state = {
-          switchEnabled: this.props.enabled,
-      }
+        super(props);
+        this.state = {
+            switchEnabled: this.props.enabled,
+        }
     }
   
     toggleSwitch(value) {
-      this.setState({switchEnabled: value})
+        this.setState({switchEnabled: value});
     }
     
     render() {
-      return (
-        <View style={styles.alarmItem}>
-          <View>
-            <Text style={styles.alarmItemTime}>{this.props.time}</Text>
-            <Text style={styles.alarmItemTitle}>{this.props.title} {this.props.repeatTitle ? `, ${this.props.repeatTitle}` : ''}</Text>
-          </View>
-          <View>
-            <Switch style={styles.alarmItemSwitch} onValueChange={this.toggleSwitch.bind(this)} value = {this.state.switchEnabled}/>
-          </View>
-        </View>
-      )
+        return (
+            <Swipeable 
+                leftButtons={leftButtons} 
+                rightButtons={rightButtons} 
+                rightButtonWidth={80}
+                /* onSwipeStart={() => this.setState({isSwiping: true})}
+                onSwipeRelease={() => this.setState({isSwiping: false})} */
+            >
+                <View style={styles.alarmItem}>
+                    <View>
+                        <Text style={styles.alarmItemTime}>{this.props.time}</Text>
+                        <Text style={styles.alarmItemTitle}>{this.props.title} {this.props.repeatTitle ? `, ${this.props.repeatTitle}` : ''}</Text>
+                    </View>
+                    <View>
+                        <Switch style={styles.alarmItemSwitch} onValueChange={this.toggleSwitch.bind(this)} value = {this.state.switchEnabled}/>
+                    </View>
+                </View>
+            </Swipeable>
+        )
     }
 }
 
@@ -106,7 +146,7 @@ function mapDispatchToProps(dispatch) {
     return bindActionCreators(ActionsRedux, dispatch);
 }
 
-const styles = StyleSheet.create({
+let styles = StyleSheet.create({
     activityIndicatorContainer:{
         backgroundColor: "#fff",
         alignItems: 'center',
@@ -116,7 +156,7 @@ const styles = StyleSheet.create({
     alarmItem: {
         borderColor: '#eee',
         borderBottomWidth: 1,
-        paddingVertical: 15,
+        height: 80,
         paddingHorizontal: 20,
         width: '100%',
         display: 'flex',
@@ -134,7 +174,17 @@ const styles = StyleSheet.create({
     },
     alarmItemSwitch: {
         marginTop: 10,
-        transform: [{scaleX: 1.2}, {scaleY: 1.2}]
+        //transform: [{scaleX: 1}, {scaleY: 1.2}]
+    },
+    swipeButton: {
+        flex: 1,
+        justifyContent: 'center',
+        paddingLeft: 20,
+        height: 80,
+        backgroundColor: colorRed
+    },
+    swipeButtonText: {
+        color: '#fff'
     }
 });
 
