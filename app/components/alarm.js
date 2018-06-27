@@ -43,27 +43,6 @@ class Alarm extends Component {
             isSwiping: value
         })
     }
-    
-    async getKey() {
-        console.log('get key');
-        try {
-            const value = await AsyncStorage.getItem('@MySuperStore:key');
-            this.setState({myKey: value});
-            console.log(value);
-        } catch (error) {
-            console.log("Error retrieving data" + error);
-        }
-    }
-    
-    async saveKey(value) {
-        console.log('save key');
-        try {
-            await AsyncStorage.setItem('@MySuperStore:key', value);
-            console.log('key was saved');
-        } catch (error) {
-            console.log("Error saving data" + error);
-        }
-    }
 
     render() {
         return (
@@ -92,8 +71,6 @@ class Alarm extends Component {
                             }}
                         />
                     }
-                    <Button onPress={() => this.saveKey([])} title={'save key'} />
-                    <Button onPress={this.getKey.bind(this)} title={'get key'} />
                 </ScrollView>
             </Container>
         )

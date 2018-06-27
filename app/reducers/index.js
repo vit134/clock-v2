@@ -1,8 +1,12 @@
 import { combineReducers } from 'redux';
  
-import { DATA_AVAILABLE, ADD_ALARM, REMOVE_ALARM, CHANGE_ALARM } from "../actions/" //Import the actions types constant we defined in our actions
+import { DATA_AVAILABLE, ADD_ALARM, REMOVE_ALARM, CHANGE_ALARM, UPDATE_SETTINGS } from "../actions/" //Import the actions types constant we defined in our actions
  
 let dataState = { data: [], loading:true };
+
+let settingsState = {
+    userName: ''
+}
  
 const dataReducer = (state = dataState, action) => {
     switch (action.type) {
@@ -28,10 +32,22 @@ const dataReducer = (state = dataState, action) => {
             return state;
     }
 };
+
+const settingsReducer = (state = settingsState, action) => {
+    switch (action.type) {
+        case UPDATE_SETTINGS:
+            console.log('reducer', {...action.newSetting}, action.newSetting)
+            state = Object.assign({}, state, {...action.newSetting});
+            return state;
+        default:
+            return state;
+    }
+};
  
 // Combine all the reducers
 const rootReducer = combineReducers({
-    dataReducer
+    dataReducer,
+    settingsReducer
     // ,[ANOTHER REDUCER], [ANOTHER REDUCER] ....
 })
  

@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import { Container, Content, Icon } from 'native-base';
 
-import { Scene, Actions } from 'react-native-router-flux';
+import { Actions } from 'react-native-router-flux';
 import { addAlarm, changeAlarm } from '../actions';
 import store from '../store';
 
@@ -21,12 +21,10 @@ import Switch from './Switch';
 class AlarmAdd extends Component {
     constructor(props) {
         super(props);
-        console.log(this.props.new);
         if (this.props.new) {
-            
             let data  = store.getState().dataReducer.data;
             this.state = {
-                id: data.length > 1 ? data[data.length - 1].id + 1 : 0,
+                id: data && data.length > 1 ? data[data.length - 1].id + 1 : 0,
                 time: new Date(),
                 title: 'Alarm',
                 enabled: true,
