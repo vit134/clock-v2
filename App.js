@@ -13,6 +13,10 @@ import AlarmRepeatModal from './app/components/alarmRepeatModal';
 import LoginHello from './app/components/Login/LoginHello';
 import LoginStep1 from './app/components/Login/LoginStep1';
 import LoginStep2 from './app/components/Login/LoginStep2';
+import LoginStep3 from './app/components/Login/LoginStep3';
+import LoginStep4 from './app/components/Login/LoginStep4';
+
+import Settings from './app/components/Settings/Settings';
 
 import { gs } from 'globalStyles';
 
@@ -86,13 +90,15 @@ export default class App extends Component {
         return (
             <Provider store={store}>
               <Router>
-                <Scene>
-                  <Scene key="login" initial hideNavBar>
-                    <Scene key="login_hello"  component={LoginHello} hideNavBar/>
-                    <Scene key="login_step1" component={LoginStep1} hideNavBar/>
-                    <Scene key="login_step2" initial component={LoginStep2} hideNavBar/>
+                <Scene hideNavBar>
+                  <Scene key="login" back={true} backTitle={'Back'} navigationBarStyle={styles.loginNavigationBarStyle}>
+                    <Scene key="login_hello" initial component={LoginHello} hideNavBar/>
+                    <Scene key="login_step1" component={LoginStep1}/>
+                    <Scene key="login_step2" component={LoginStep2}/>
+                    <Scene key="login_step3" component={LoginStep3}/>
+                    <Scene key="login_step4" component={LoginStep4}/>
                   </Scene>
-                  <Scene key="tabbar" tabs tabBarStyle={styles.tabBarStyle} navigationBarStyle={styles.navigationBarStyle} labelStyle={styles.label}>
+                  <Scene initial key="tabbar" tabs tabBarStyle={styles.tabBarStyle} navigationBarStyle={styles.navigationBarStyle} labelStyle={styles.label}>
                     {/* <Scene key="Time" iconName="ios-timer" icon={TabIcon} title="Time">
                       <Scene key="time" component={Time} />
                     </Scene> */}
@@ -102,9 +108,9 @@ export default class App extends Component {
                       <Scene key="alarmTitleModal" component={AlarmTitleModal} direction="vertical" title="Title" hideNavBar />
                       <Scene key="alarmRepeatModal" component={AlarmRepeatModal} direction="vertical" hideNavBar />
                     </Scene>
-                    {/* <Scene key="settings" title="Settings" iconName="ios-settings" icon={TabIcon}>
+                    <Scene initial key="settings" title="Settings" iconName="ios-settings" icon={TabIcon} hideNavBar>
                       <Scene key="settings" component={Settings} title="Settings" />
-                    </Scene> */}
+                    </Scene>
                   </Scene>
                 </Scene>
               </Router>
@@ -121,6 +127,12 @@ const styles = StyleSheet.create({
   navigationBarStyle: {
     paddingTop: 10,
     paddingHorizontal: 20,
+  },
+  loginNavigationBarStyle: {
+    paddingTop: 20,
+    paddingHorizontal: 10,
+    backgroundColor: '#fff',
+    borderBottomWidth: 0
   },
   plusButtonStyle: {
     color: '#fc363b',

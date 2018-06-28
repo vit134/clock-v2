@@ -11,17 +11,17 @@ import { Container, Content, Icon } from 'native-base';
 import * as S from 'globalStyles';
 
 export default class LoginHello extends Component {
-  render() {
-    return (
-        <Container>
-            <View style={styles.container}>
-                <Text style={styles.title}>Hello</Text>
-                <Text style={styles.text}>To start working you need to configure the application</Text>
-                <Button title={'Next'} onPress={() => Actions.login_step1()} />
-            </View>
-        </Container>
-    )
-  }
+    render() {
+        return (
+            <Container>
+                <View style={styles.container}>
+                    <Text style={styles.title}>Hello</Text>
+                    <Text style={styles.text}>To start working you need to configure the application</Text>
+                    <Button title={'Next'} onPress={() => Actions.login_step1()} />
+                </View>
+            </Container>
+        )
+    }
 }
 
 const styles = StyleSheet.create({

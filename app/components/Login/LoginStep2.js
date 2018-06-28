@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, Button, Picker } from 'react-native';
+import { StyleSheet, Text, View, Button, TouchableHighlight } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 import { Container, Content, Icon } from 'native-base';
 
@@ -8,18 +8,28 @@ import { updateSettings } from '../../actions';
 
 import * as S from 'globalStyles';
 
-export default class LoginStep1 extends Component {
+export default class LoginStep2 extends Component {
     constructor() {
         super();
 
         this.state = {
-            theme: ''
+            theme: 'light'
         }
+
+        this.switchRadio = this.switchRadio.bind(this);
     }
 
     goToNextStep() {
-        store.dispatch(updateSettings({userName: this.state.userName}));
-        //Actions.login_step2()
+        store.dispatch(updateSettings({theme: this.state.theme}));
+        Actions.login_step3();
+    }
+
+    switchRadio(value) {
+        if (this.state.theme === value) return;
+
+        this.setState({
+            theme: value
+        });
     }
 
     render() {
@@ -27,14 +37,20 @@ export default class LoginStep1 extends Component {
             <Container>
                 <View style={styles.container}>
                     <Text style={styles.text}>Select the skin theme</Text>
-                    <Picker
-                        selectedValue={this.state.theme}
-                        style={{ height: 10, width: 320, borderColor: 'red' }}
-                        itemStyle={{borderColor: 'red'}}
-                        onValueChange={(itemValue, itemIndex) => this.setState({theme: itemValue})}>
-                        <Picker.Item label="Dark" value="dark"/>
-                        <Picker.Item label="Light" value="light"/>
-                    </Picker>
+                    <View style={styles.radio}>
+                        <TouchableHighlight
+                            underlayColor={'rgba(255,255,255, 0)'}
+                            onPress={() => this.switchRadio('dark')}
+                            style={[styles.radioButton, styles.radioButtonLeft, this.state.theme === 'dark' ? {backgroundColor: '#eee'} : {}]}>
+                            <Text style={styles.radioButtonText}>Dark</Text>
+                        </TouchableHighlight>
+                        <TouchableHighlight
+                            underlayColor={'rgba(255,255,255, 0)'}
+                            onPress={() => this.switchRadio('light')}
+                            style={[styles.radioButton, this.state.theme === 'light' ? {backgroundColor: '#eee'} : {}]}>
+                            <Text style={styles.radioButtonText}>Light</Text>
+                        </TouchableHighlight>
+                    </View>
                     <Button title={'Next'} onPress={this.goToNextStep.bind(this)} />
                 </View>
             </Container>
@@ -70,5 +86,34 @@ const styles = StyleSheet.create({
         color: '#c1c1c1',
         textAlign: 'center',
         marginBottom: 30,
+    },
+    radio: {
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        width: '100%',
+        paddingHorizontal: 30,
+        marginBottom: 30,
+    },
+    radioButton: {
+        width: '50%',
+        borderColor: '#eee',
+        borderWidth: 2,
+        paddingVertical: 10,
+        borderBottomLeftRadius: 0,
+        borderBottomRightRadius: 4,
+        borderTopLeftRadius: 0,
+        borderTopRightRadius: 4,
+    },
+    radioButtonLeft: {
+        borderRightWidth: 0,
+        borderBottomLeftRadius: 4,
+        borderBottomRightRadius: 0,
+        borderTopLeftRadius: 4,
+        borderTopRightRadius: 0,
+    },
+    radioButtonText: {
+        fontSize: 18,
+        textAlign: 'center',
     }
 });

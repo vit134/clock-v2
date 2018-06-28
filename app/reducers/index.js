@@ -4,9 +4,7 @@ import { DATA_AVAILABLE, ADD_ALARM, REMOVE_ALARM, CHANGE_ALARM, UPDATE_SETTINGS 
  
 let dataState = { data: [], loading:true };
 
-let settingsState = {
-    userName: ''
-}
+let settingsState = {};
  
 const dataReducer = (state = dataState, action) => {
     switch (action.type) {
