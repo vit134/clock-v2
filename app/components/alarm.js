@@ -66,7 +66,6 @@ class Alarm extends Component {
                             data={this.props.data}
                             renderItem={this.renderItem}
                             keyExtractor={(item, index) => {
-                                //console.log(item);
                                 return item.id.toString()
                             }}
                         />

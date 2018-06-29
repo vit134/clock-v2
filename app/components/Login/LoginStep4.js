@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, Button, Picker } from 'react-native';
+import { StyleSheet, Text, View, Button, Picker, AsyncStorage } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 import { Container, Content, Icon } from 'native-base';
 
@@ -8,13 +8,21 @@ import { updateSettings } from '../../actions';
 
 import * as S from 'globalStyles';
 
+async function saveKey(value) {
+  try {
+      await AsyncStorage.setItem('settings', JSON.stringify(value));
+  } catch (error) {
+      console.log("Error saving data" + error);
+  }
+}
+
 export default class LoginStep4 extends Component {
     constructor() {
         super();
     }
 
     goToNextStep() {
-        Actions.tabbar();
+        saveKey(store.getState().settingsReducer).then(() => Actions.tabbar());
     }
 
     render() {

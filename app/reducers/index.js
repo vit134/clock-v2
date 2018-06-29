@@ -34,7 +34,7 @@ const dataReducer = (state = dataState, action) => {
 const settingsReducer = (state = settingsState, action) => {
     switch (action.type) {
         case UPDATE_SETTINGS:
-            console.log('reducer', {...action.newSetting}, action.newSetting)
+            //console.log('reducer', {...action.newSetting}, action.newSetting)
             state = Object.assign({}, state, {...action.newSetting});
             return state;
         default:

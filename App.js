@@ -5,6 +5,8 @@ import { StyleSheet, AsyncStorage, View, Text } from 'react-native';
 import { Icon } from 'native-base';
 
 import store from './app/store';
+import { updateSettings } from './app/actions';
+
 import Alarm from './app/components/alarm';
 import AlarmAdd from './app/components/alarmAdd';
 import AlarmTitleModal from './app/components/alarmTitleModal';
@@ -28,32 +30,11 @@ const TabIcon = ({ focused, title, iconName }) => {
   );
 }
 
-const initialStorage = {
-  first: true,
-  settingsClock: {
-    color: 'red',
-    brightness: 60,
-    alarmVolume: 50
-  },
-  settingsApp: {
-    theme: 'light',
-    language: 'ru'
-  }
-}
-
-async function getKey() {
+async function getKey(key) {
   try {
-      return await AsyncStorage.getItem('storage1');
+      return await AsyncStorage.getItem(key);
   } catch (error) {
       console.log("Error retrieving data" + error);
-  }
-}
-
-async function saveKey(value) {
-  try {
-      await AsyncStorage.setItem('storage1', value);
-  } catch (error) {
-      console.log("Error saving data" + error);
   }
 }
 
@@ -62,28 +43,26 @@ export default class App extends Component {
       super();
 
       this.state = {
-        first: false
+        first: true
       }
+
+      this.mounted = false;
+      
+    }
+
+    componentWillMount() {
+      getKey('settings').then((value) => {
+        if (value) {
+          this.mounted = true;
+          store.dispatch(updateSettings({...JSON.parse(value)}));
+        }
+      })
     }
 
     componentDidMount() {
-      let storage;
-
-      getKey().then((value) => {
-        if (!value) {
-          saveKey(JSON.stringify(initialStorage))
-            .then(() => {
-              this.storage = JSON.parse(initialStorage);
-            });
-        } else {
-          storage = JSON.parse(value);
-          this.storage = storage;
-          
-          this.setState({first: storage.first});
-        }
-
-        
-      })
+      if (this.mounted) {
+        this.setState({first: false});
+      }
     }
 
     render() {
@@ -91,24 +70,21 @@ export default class App extends Component {
             <Provider store={store}>
               <Router>
                 <Scene hideNavBar>
-                  <Scene key="login" back={true} backTitle={'Back'} navigationBarStyle={styles.loginNavigationBarStyle}>
+                  <Scene initial={this.state.first ? true : false} key="login" back={true} backTitle={'Back'} navigationBarStyle={styles.loginNavigationBarStyle}>
                     <Scene key="login_hello" initial component={LoginHello} hideNavBar/>
                     <Scene key="login_step1" component={LoginStep1}/>
                     <Scene key="login_step2" component={LoginStep2}/>
                     <Scene key="login_step3" component={LoginStep3}/>
                     <Scene key="login_step4" component={LoginStep4}/>
                   </Scene>
-                  <Scene initial key="tabbar" tabs tabBarStyle={styles.tabBarStyle} navigationBarStyle={styles.navigationBarStyle} labelStyle={styles.label}>
-                    {/* <Scene key="Time" iconName="ios-timer" icon={TabIcon} title="Time">
-                      <Scene key="time" component={Time} />
-                    </Scene> */}
-                    <Scene key="alarm" title="Alarm" iconName="ios-alarm" icon={TabIcon} >
+                  <Scene initial={!this.state.first ? false : true} key="tabbar" tabs tabBarStyle={styles.tabBarStyle} navigationBarStyle={styles.navigationBarStyle} labelStyle={styles.label}>
+                    <Scene initial key="alarm" title="Alarm" iconName="ios-alarm" icon={TabIcon} >
                       <Scene key="alarm" component={Alarm} title="Alarm" hideNavBar />
                       <Scene key="alarmAdd" component={AlarmAdd} title="Add alarm" hideNavBar />
                       <Scene key="alarmTitleModal" component={AlarmTitleModal} direction="vertical" title="Title" hideNavBar />
                       <Scene key="alarmRepeatModal" component={AlarmRepeatModal} direction="vertical" hideNavBar />
                     </Scene>
-                    <Scene initial key="settings" title="Settings" iconName="ios-settings" icon={TabIcon} hideNavBar>
+                    <Scene  key="settings" title="Settings" iconName="ios-settings" icon={TabIcon} hideNavBar>
                       <Scene key="settings" component={Settings} title="Settings" />
                     </Scene>
                   </Scene>
