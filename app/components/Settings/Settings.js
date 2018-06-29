@@ -3,7 +3,8 @@ import {
     StyleSheet,
     Text,
     View,
-    AsyncStorage
+    AsyncStorage,
+    Alert
 } from 'react-native';
 import { Container, Content, Icon, List, ListItem, Left, Right, Separator, Body, Picker, Thumbnail } from 'native-base';
 
@@ -30,6 +31,7 @@ export default class Settings extends Component {
         this.state = {...store.getState().settingsReducer};
 
         this.changeState = this.changeState.bind(this)
+        this.resetAlert = this.resetAlert.bind(this)
     }
 
 
@@ -39,9 +41,19 @@ export default class Settings extends Component {
         });
     }
 
+    resetAlert() {
+        Alert.alert(
+            'Reset settings',
+            'Do you really want to reset the settings?',
+            [
+              {text: 'Yes', onPress: () => this.reset()},
+              {text: 'No', onPress: () => console.log('OK Pressed')},
+            ],
+            { cancelable: false }
+          )
+    }
+
     reset() {
-        console.log('reset');
-        //store.dispatch(resetSettings());
         saveKey(JSON.stringify({})).then(() => {
             store.dispatch(resetSettings());
             Actions.login();
@@ -81,7 +93,7 @@ export default class Settings extends Component {
                                 </Picker>
                             </Right>
                         </ListItem>
-                        <ListItem picker style={{borderBottomWidth: 0}}>
+                        <ListItem picker>
                             <Left><Text>Language</Text></Left>
                             <Right>
                                 <Picker
@@ -99,7 +111,7 @@ export default class Settings extends Component {
                                 </Picker>
                             </Right>
                         </ListItem>
-                        <ListItem onPress={this.reset}>
+                        <ListItem onPress={this.resetAlert} style={{borderBottomWidth: 0}}>
                             <Left><Text>Reset settings</Text></Left>
                             <Right><Icon name="arrow-forward" style={{color: S.colorRed}}/></Right>
                         </ListItem>

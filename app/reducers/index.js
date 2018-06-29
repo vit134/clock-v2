@@ -1,10 +1,20 @@
 import { combineReducers } from 'redux';
+
+import { AsyncStorage } from 'react-native';
  
 import { DATA_AVAILABLE, ADD_ALARM, REMOVE_ALARM, CHANGE_ALARM, UPDATE_SETTINGS, RESET_SETTINGS } from "../actions/" //Import the actions types constant we defined in our actions
  
 let dataState = { data: [], loading:true };
 
 let settingsState = {};
+
+async function saveKey(value) {
+  try {
+      await AsyncStorage.setItem('settings', JSON.stringify(value));
+  } catch (error) {
+      console.log("Error saving data" + error);
+  }
+}
  
 const dataReducer = (state = dataState, action) => {
     switch (action.type) {
@@ -34,13 +44,10 @@ const dataReducer = (state = dataState, action) => {
 const settingsReducer = (state = settingsState, action) => {
     switch (action.type) {
         case UPDATE_SETTINGS:
-            //console.log('reducer', {...action.newSetting}, action.newSetting)
             state = Object.assign({}, state, {...action.newSetting});
             return state;
         case RESET_SETTINGS:
-            
             state = {};
-            console.log('reducer reset', state);
             return state;
         default:
             return state;

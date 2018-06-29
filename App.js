@@ -51,9 +51,11 @@ export default class App extends Component {
     }
 
     componentWillMount() {
+      console.log('will')
       getKey('settings').then((value) => {
-        console.log('storage settings value', value);
-        if (value && Object.keys(value).length > 0) {
+        console.log('storage settings value', value, Object.keys(JSON.parse(value)).length);
+        if (value && Object.keys(JSON.parse(value)).length > 0) {
+          console.log('bla')
           this.mounted = true;
           store.dispatch(updateSettings({...JSON.parse(value)}));
         }
@@ -61,39 +63,40 @@ export default class App extends Component {
     }
 
     componentDidMount() {
+      console.log('did', this.mounted);
       if (this.mounted) {
         this.setState({first: false});
       }
     }
 
     render() {
-      console.log(this.state.first)
-        return (
-            <Provider store={store}>
-              <Router>
-                <Scene key="home" hideNavBar>
-                  <Scene initial={this.state.first ? true : false} key="login" back={true} backTitle={'Back'} navigationBarStyle={styles.loginNavigationBarStyle}>
-                    <Scene key="login_hello" initial component={LoginHello} hideNavBar/>
-                    <Scene key="login_step1" component={LoginStep1}/>
-                    <Scene key="login_step2" component={LoginStep2}/>
-                    <Scene key="login_step3" component={LoginStep3}/>
-                    <Scene key="login_step4" component={LoginStep4}/>
-                  </Scene>
-                  <Scene initial={this.state.first ? false : true} key="tabbar" tabs tabBarStyle={styles.tabBarStyle} navigationBarStyle={styles.navigationBarStyle} labelStyle={styles.label}>
-                    <Scene key="alarm" title="Alarm" iconName="ios-alarm" icon={TabIcon} >
-                      <Scene key="alarm" component={Alarm} title="Alarm" hideNavBar />
-                      <Scene key="alarmAdd" component={AlarmAdd} title="Add alarm" hideNavBar />
-                      <Scene key="alarmTitleModal" component={AlarmTitleModal} direction="vertical" title="Title" hideNavBar />
-                      <Scene key="alarmRepeatModal" component={AlarmRepeatModal} direction="vertical" hideNavBar />
-                    </Scene>
-                    <Scene  key="settings" title="Settings" iconName="ios-settings" icon={TabIcon} hideNavBar>
-                      <Scene key="settings" component={Settings} title="Settings" />
-                    </Scene>
-                  </Scene>
+      console.log(this.state.first, this.mounted)
+      return (
+        <Provider store={store}>
+          <Router>
+            <Scene key="home" hideNavBar>
+              <Scene initial={this.state.first ? true : false} key="login" back={true} backTitle={'Back'} navigationBarStyle={styles.loginNavigationBarStyle}>
+                <Scene key="login_hello" initial component={LoginHello} hideNavBar/>
+                <Scene key="login_step1" component={LoginStep1}/>
+                <Scene key="login_step2" component={LoginStep2}/>
+                <Scene key="login_step3" component={LoginStep3}/>
+                <Scene key="login_step4" component={LoginStep4}/>
+              </Scene>
+              <Scene initial={this.state.first ? false : true} key="tabbar" tabs tabBarStyle={styles.tabBarStyle} navigationBarStyle={styles.navigationBarStyle} labelStyle={styles.label}>
+                <Scene key="alarm" title="Alarm" iconName="ios-alarm" icon={TabIcon} >
+                  <Scene key="alarm" component={Alarm} title="Alarm" hideNavBar />
+                  <Scene key="alarmAdd" component={AlarmAdd} title="Add alarm" hideNavBar />
+                  <Scene key="alarmTitleModal" component={AlarmTitleModal} direction="vertical" title="Title" hideNavBar />
+                  <Scene key="alarmRepeatModal" component={AlarmRepeatModal} direction="vertical" hideNavBar />
                 </Scene>
-              </Router>
-            </Provider>
-          )
+                <Scene  key="settings" title="Settings" iconName="ios-settings" icon={TabIcon} hideNavBar>
+                  <Scene key="settings" component={Settings} title="Settings" />
+                </Scene>
+              </Scene>
+            </Scene>
+          </Router>
+        </Provider>
+      )
     }
 }
 
