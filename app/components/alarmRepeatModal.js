@@ -12,7 +12,7 @@ import { Container, Header, Title, Content, Left, Right, Body } from 'native-bas
 import { Actions } from 'react-native-router-flux';
 
 
-import gs from 'globalStyles'
+import { gs } from 'globalStyles'
 import NavBar from './NavBar';
 
 const repeatOption = [

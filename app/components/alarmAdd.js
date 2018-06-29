@@ -10,27 +10,42 @@ import {
 } from 'react-native';
 import { Container, Content, Icon } from 'native-base';
 
-import { Scene, Actions } from 'react-native-router-flux';
-import { addAlarm } from '../actions';
+import { Actions } from 'react-native-router-flux';
+import { addAlarm, changeAlarm } from '../actions';
 import store from '../store';
 
-import gs from 'globalStyles';
+import { gs } from 'globalStyles';
 import NavBar from './NavBar';
 import Switch from './Switch';
 
 class AlarmAdd extends Component {
     constructor(props) {
         super(props);
-        let data  = store.getState().dataReducer.data;
-        this.state = {
-            id: data[data.length - 1].id + 1,
-            time: new Date(),
-            title: 'Alarm',
-            enabled: true,
-            repeatSong: false,
-            repeat: [],
-            repeatTitle: ''
-        };
+        if (this.props.new) {
+            let data  = store.getState().dataReducer.data;
+            this.state = {
+                id: data && data.length > 1 ? data[data.length - 1].id + 1 : 0,
+                time: new Date(),
+                title: 'Alarm',
+                enabled: true,
+                repeatSong: false,
+                repeat: [],
+                repeatTitle: ''
+            };
+        } else {
+            let alarmData = this.props;
+            alarmData.time = new Date(alarmData.time);
+
+            this.state = {
+                id: alarmData.id,
+                time: alarmData.time,
+                title: alarmData.title,
+                enabled: alarmData.enabled,
+                repeatSong: alarmData.repeatSong,
+                repeat: alarmData.repeat,
+                repeatTitle: alarmData.repeatTitle
+            };
+        }
         
         this.setDate = this.setDate.bind(this);
         this.updateRepeat = this.updateRepeat.bind(this);
@@ -106,9 +121,24 @@ class AlarmAdd extends Component {
 
     saveAlarm() {
         let newAlarm = this.state;
-        newAlarm.time = `${newAlarm.time.getHours()}:${newAlarm.time.getMinutes()}`
-        store.dispatch(addAlarm(newAlarm));
+        newAlarm.timeTitle = `${newAlarm.time.getHours()}:${newAlarm.time.getMinutes()}`
+        if (this.props.new) {
+            store.dispatch(addAlarm(newAlarm));
+            this.saveKey(newAlarm)
+        } else {
+            store.dispatch(changeAlarm(newAlarm.id, newAlarm));
+        }
         Actions.pop();
+    }
+    
+    async saveKey(value) {
+        console.log('save key');
+        try {
+            await AsyncStorage.setItem('@MySuperStore:key', value);
+            console.log('key was saved');
+        } catch (error) {
+            console.log("Error saving data" + error);
+        }
     }
 
     render() {
@@ -123,7 +153,7 @@ class AlarmAdd extends Component {
                 />
                 <Content>
                     <DatePickerIOS
-                        date={this.state.time}
+                        date={new Date(this.state.time)}
                         onDateChange={this.setDate}
                         mode={'time'}
                         style={styles.datePicker}

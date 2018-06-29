@@ -9,7 +9,7 @@ import { Container, Content } from 'native-base';
 
 import { Actions } from 'react-native-router-flux';
 
-import gs from 'globalStyles';
+import { gs } from 'globalStyles';
 import NavBar from './NavBar';
 
 class AlarmTitleModal extends Component {
