@@ -2,17 +2,26 @@ import React, { Component } from 'react';
 import {
     StyleSheet,
     Text,
-    View
+    View,
+    AsyncStorage
 } from 'react-native';
 import { Container, Content, Icon, List, ListItem, Left, Right, Separator, Body, Picker, Thumbnail } from 'native-base';
 
 import { Actions } from 'react-native-router-flux';
-import { addAlarm, changeAlarm } from '../../actions';
+import { resetSettings } from '../../actions';
 import store from '../../store';
 
 import * as S from 'globalStyles';
 import NavBar from '../NavBar';
 import Switch from '../Switch';
+
+async function saveKey(value) {
+    try {
+        await AsyncStorage.setItem('settings', value);
+    } catch (error) {
+        console.log("Error saving data" + error);
+    }
+}
 
 export default class Settings extends Component {
     constructor(props) {
@@ -28,6 +37,16 @@ export default class Settings extends Component {
         this.setState({
             [key]: value
         });
+    }
+
+    reset() {
+        console.log('reset');
+        //store.dispatch(resetSettings());
+        saveKey(JSON.stringify({})).then(() => {
+            store.dispatch(resetSettings());
+            Actions.login();
+        });
+
     }
 
     render() {
@@ -79,6 +98,10 @@ export default class Settings extends Component {
                                     <Picker.Item label="English" value="en" />
                                 </Picker>
                             </Right>
+                        </ListItem>
+                        <ListItem onPress={this.reset}>
+                            <Left><Text>Reset settings</Text></Left>
+                            <Right><Icon name="arrow-forward" style={{color: S.colorRed}}/></Right>
                         </ListItem>
                         <Separator bordered style={styles.separator}>
                             <Text style={styles.separatorTitle}>Clock</Text>

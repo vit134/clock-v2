@@ -3,6 +3,7 @@ export const ADD_ALARM = 'ADD_ALARM';
 export const REMOVE_ALARM = 'REMOVE_ALARM';
 export const CHANGE_ALARM = 'CHANGE_ALARM';
 export const UPDATE_SETTINGS = 'UPDATE_SETTINGS';
+export const RESET_SETTINGS = 'RESET_SETTINGS';
 
 //Import the sample data
 import Data from '../alarms';
@@ -47,6 +48,12 @@ export function changeAlarm(id, changingAlarm){
 export function updateSettings(newSetting){
     return (dispatch) => {
         dispatch({type: UPDATE_SETTINGS, newSetting});
+    };
+}
+
+export function resetSettings(){
+    return (dispatch) => {
+        dispatch({type: RESET_SETTINGS});
     };
 }
 

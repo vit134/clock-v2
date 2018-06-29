@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux';
  
-import { DATA_AVAILABLE, ADD_ALARM, REMOVE_ALARM, CHANGE_ALARM, UPDATE_SETTINGS } from "../actions/" //Import the actions types constant we defined in our actions
+import { DATA_AVAILABLE, ADD_ALARM, REMOVE_ALARM, CHANGE_ALARM, UPDATE_SETTINGS, RESET_SETTINGS } from "../actions/" //Import the actions types constant we defined in our actions
  
 let dataState = { data: [], loading:true };
 
@@ -36,6 +36,11 @@ const settingsReducer = (state = settingsState, action) => {
         case UPDATE_SETTINGS:
             //console.log('reducer', {...action.newSetting}, action.newSetting)
             state = Object.assign({}, state, {...action.newSetting});
+            return state;
+        case RESET_SETTINGS:
+            
+            state = {};
+            console.log('reducer reset', state);
             return state;
         default:
             return state;

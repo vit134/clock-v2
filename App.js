@@ -52,7 +52,8 @@ export default class App extends Component {
 
     componentWillMount() {
       getKey('settings').then((value) => {
-        if (value) {
+        console.log('storage settings value', value);
+        if (value && Object.keys(value).length > 0) {
           this.mounted = true;
           store.dispatch(updateSettings({...JSON.parse(value)}));
         }
@@ -66,10 +67,11 @@ export default class App extends Component {
     }
 
     render() {
+      console.log(this.state.first)
         return (
             <Provider store={store}>
               <Router>
-                <Scene hideNavBar>
+                <Scene key="home" hideNavBar>
                   <Scene initial={this.state.first ? true : false} key="login" back={true} backTitle={'Back'} navigationBarStyle={styles.loginNavigationBarStyle}>
                     <Scene key="login_hello" initial component={LoginHello} hideNavBar/>
                     <Scene key="login_step1" component={LoginStep1}/>
@@ -77,8 +79,8 @@ export default class App extends Component {
                     <Scene key="login_step3" component={LoginStep3}/>
                     <Scene key="login_step4" component={LoginStep4}/>
                   </Scene>
-                  <Scene initial={!this.state.first ? false : true} key="tabbar" tabs tabBarStyle={styles.tabBarStyle} navigationBarStyle={styles.navigationBarStyle} labelStyle={styles.label}>
-                    <Scene initial key="alarm" title="Alarm" iconName="ios-alarm" icon={TabIcon} >
+                  <Scene initial={this.state.first ? false : true} key="tabbar" tabs tabBarStyle={styles.tabBarStyle} navigationBarStyle={styles.navigationBarStyle} labelStyle={styles.label}>
+                    <Scene key="alarm" title="Alarm" iconName="ios-alarm" icon={TabIcon} >
                       <Scene key="alarm" component={Alarm} title="Alarm" hideNavBar />
                       <Scene key="alarmAdd" component={AlarmAdd} title="Add alarm" hideNavBar />
                       <Scene key="alarmTitleModal" component={AlarmTitleModal} direction="vertical" title="Title" hideNavBar />
