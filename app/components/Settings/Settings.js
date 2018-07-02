@@ -2,17 +2,27 @@ import React, { Component } from 'react';
 import {
     StyleSheet,
     Text,
-    View
+    View,
+    AsyncStorage,
+    Alert
 } from 'react-native';
 import { Container, Content, Icon, List, ListItem, Left, Right, Separator, Body, Picker, Thumbnail } from 'native-base';
 
 import { Actions } from 'react-native-router-flux';
-import { addAlarm, changeAlarm } from '../../actions';
+import { resetSettings } from '../../actions';
 import store from '../../store';
 
 import * as S from 'globalStyles';
 import NavBar from '../NavBar';
 import Switch from '../Switch';
+
+async function saveKey(value) {
+    try {
+        await AsyncStorage.setItem('settings', value);
+    } catch (error) {
+        console.log("Error saving data" + error);
+    }
+}
 
 export default class Settings extends Component {
     constructor(props) {
@@ -21,6 +31,7 @@ export default class Settings extends Component {
         this.state = {...store.getState().settingsReducer};
 
         this.changeState = this.changeState.bind(this)
+        this.resetAlert = this.resetAlert.bind(this)
     }
 
 
@@ -28,6 +39,26 @@ export default class Settings extends Component {
         this.setState({
             [key]: value
         });
+    }
+
+    resetAlert() {
+        Alert.alert(
+            'Reset settings',
+            'Do you really want to reset the settings?',
+            [
+              {text: 'Yes', onPress: () => this.reset()},
+              {text: 'No', onPress: () => console.log('OK Pressed')},
+            ],
+            { cancelable: false }
+          )
+    }
+
+    reset() {
+        saveKey(JSON.stringify({})).then(() => {
+            store.dispatch(resetSettings());
+            Actions.login();
+        });
+
     }
 
     render() {
@@ -62,7 +93,7 @@ export default class Settings extends Component {
                                 </Picker>
                             </Right>
                         </ListItem>
-                        <ListItem picker style={{borderBottomWidth: 0}}>
+                        <ListItem picker>
                             <Left><Text>Language</Text></Left>
                             <Right>
                                 <Picker
@@ -79,6 +110,10 @@ export default class Settings extends Component {
                                     <Picker.Item label="English" value="en" />
                                 </Picker>
                             </Right>
+                        </ListItem>
+                        <ListItem onPress={this.resetAlert} style={{borderBottomWidth: 0}}>
+                            <Left><Text>Reset settings</Text></Left>
+                            <Right><Icon name="alert" style={{color: S.colorRed}}/></Right>
                         </ListItem>
                         <Separator bordered style={styles.separator}>
                             <Text style={styles.separatorTitle}>Clock</Text>
@@ -101,7 +136,7 @@ export default class Settings extends Component {
                         </ListItem>
                         <ListItem>
                             <Left><Text>Quiet mode</Text></Left>
-                            <Right><Icon name="arrow-forward" style={{color: S.colorRed}}/></Right>
+                            <Right><Switch /></Right>
                         </ListItem>
                     </List>
                 </Content>

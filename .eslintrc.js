@@ -1,7 +1,7 @@
 module.exports = {
     "extends": "airbnb",
     "rules": {
-        indent: [true, 4]
+        indent: [true, 2]
     },
     "plugins": [
         "react",

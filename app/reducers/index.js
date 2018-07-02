@@ -1,15 +1,25 @@
 import { combineReducers } from 'redux';
+
+import { AsyncStorage } from 'react-native';
  
-import { DATA_AVAILABLE, ADD_ALARM, REMOVE_ALARM, CHANGE_ALARM, UPDATE_SETTINGS } from "../actions/" //Import the actions types constant we defined in our actions
+import { DATA_AVAILABLE, ADD_ALARM, REMOVE_ALARM, CHANGE_ALARM, GET_SETTINGS, UPDATE_SETTINGS, RESET_SETTINGS } from "../actions/" //Import the actions types constant we defined in our actions
  
 let dataState = { data: [], loading:true };
 
-let settingsState = {};
+let settingsState = {loading: true, first: true};
+
+async function saveKey(value) {
+  try {
+      await AsyncStorage.setItem('settings', JSON.stringify(value));
+  } catch (error) {
+      console.log("Error saving data" + error);
+  }
+}
  
 const dataReducer = (state = dataState, action) => {
     switch (action.type) {
         case DATA_AVAILABLE:
-            state = Object.assign({}, state, { data: action.data, loading:false });
+            state = Object.assign({}, state, { data: action.data, loading: false });
             return state;
         case ADD_ALARM:
             state = Object.assign({}, state, { data: state.data.concat(action.newAlarm) });
@@ -33,9 +43,16 @@ const dataReducer = (state = dataState, action) => {
 
 const settingsReducer = (state = settingsState, action) => {
     switch (action.type) {
+        case GET_SETTINGS:
+            let first = true;
+            if (Object.keys(action.settings).length > 0) first = false;
+            state = Object.assign({}, state, {...action.settings, loading: false, first});
+            return state;
         case UPDATE_SETTINGS:
-            //console.log('reducer', {...action.newSetting}, action.newSetting)
             state = Object.assign({}, state, {...action.newSetting});
+            return state;
+        case RESET_SETTINGS:
+            state.settings = {};
             return state;
         default:
             return state;
