@@ -23,6 +23,7 @@ export default class LoginStep4 extends Component {
 
     goToNextStep() {
         saveKey(store.getState().settingsReducer).then(() => Actions.tabbar());
+        console.log(store.getState().settingsReducer);
     }
 
     render() {

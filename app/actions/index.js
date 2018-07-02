@@ -2,15 +2,18 @@ export const DATA_AVAILABLE = 'DATA_AVAILABLE';
 export const ADD_ALARM = 'ADD_ALARM';
 export const REMOVE_ALARM = 'REMOVE_ALARM';
 export const CHANGE_ALARM = 'CHANGE_ALARM';
+export const GET_SETTINGS = 'GET_SETTINGS';
 export const UPDATE_SETTINGS = 'UPDATE_SETTINGS';
 export const RESET_SETTINGS = 'RESET_SETTINGS';
+
+import { AsyncStorage } from 'react-native';
 
 //Import the sample data
 import Data from '../alarms';
 
 async function getKey() {
     try {
-        return await AsyncStorage.getItem('@alarms');
+        return await AsyncStorage.getItem('settings');
     } catch (error) {
         console.log("Error retrieving data" + error);
     }
@@ -42,6 +45,17 @@ export function removeAlarm(id){
 export function changeAlarm(id, changingAlarm){
     return (dispatch) => {
         dispatch({type: CHANGE_ALARM, id, changingAlarm});
+    };
+}
+
+export function getSettings(newSetting){
+    return (dispatch) => {
+        getKey().then(value => {
+            
+            //console.log('actions', JSON.parse(value));
+            return dispatch({type: GET_SETTINGS, settings: JSON.parse(value)})
+        })
+        //dispatch({type: GET_SETTINGS, newSetting});
     };
 }
 
