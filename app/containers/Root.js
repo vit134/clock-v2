@@ -21,6 +21,7 @@ import LoginStep3 from '../components/Login/LoginStep3';
 import LoginStep4 from '../components/Login/LoginStep4';
 
 import Settings from '../components/Settings/Settings';
+import SettingsUser from '../components/Settings/SettingsUser';
 
 import { gs } from 'globalStyles';
 
@@ -86,7 +87,8 @@ class Root extends Component {
                             <Scene key="alarmRepeatModal" component={AlarmRepeatModal} direction="vertical" hideNavBar />
                         </Scene>
                         <Scene  key="settings" title="Settings" iconName="ios-settings" icon={TabIcon} hideNavBar>
-                            <Scene key="settings" component={Settings} title="Settings" />
+                            <Scene initial key="settings-all" component={Settings} title="Settings" />
+                            <Scene key="settingsUser" component={SettingsUser} title="User settings" back={true} hideNavBar={false}/>
                         </Scene>
                         </Scene>
                     </Scene>

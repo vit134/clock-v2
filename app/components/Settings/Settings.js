@@ -4,25 +4,18 @@ import {
     Text,
     View,
     AsyncStorage,
-    Alert
+    Alert,
+    TouchableHighlight
 } from 'react-native';
 import { Container, Content, Icon, List, ListItem, Left, Right, Separator, Body, Picker, Thumbnail } from 'native-base';
 
 import { Actions } from 'react-native-router-flux';
-import { resetSettings } from '../../actions';
+import { resetSettings, changeSettings } from '../../actions';
 import store from '../../store';
 
 import * as S from 'globalStyles';
 import NavBar from '../NavBar';
 import Switch from '../Switch';
-
-async function saveKey(value) {
-    try {
-        await AsyncStorage.setItem('settings', value);
-    } catch (error) {
-        console.log("Error saving data" + error);
-    }
-}
 
 export default class Settings extends Component {
     constructor(props) {
@@ -39,6 +32,8 @@ export default class Settings extends Component {
         this.setState({
             [key]: value
         });
+        
+        store.dispatch(changeSettings({[key]: value}, store.getState().settingsReducer));
     }
 
     resetAlert() {
@@ -66,11 +61,13 @@ export default class Settings extends Component {
             <Container style={S.gs.container}>
                 <NavBar title={'Settings'} />
                 <Content>
-                    <View style={styles.user}>
-                        <View style={styles.userBox}><Thumbnail square source={require('./default_avatar.png')} /></View>
-                        <View style={[styles.userBox, styles.userBody]}><Text style={styles.userText}>{this.state.userName}</Text></View>
-                        <View style={[styles.userBox, styles.userRight]}><Icon name="arrow-forward" style={{color: S.colorRed}}/></View>
-                    </View>
+                    <TouchableHighlight onPress={() => Actions.settingsUser()}>
+                        <View style={styles.user}>
+                            <View style={styles.userBox}><Thumbnail square source={require('./default_avatar.png')} /></View>
+                            <View style={[styles.userBox, styles.userBody]}><Text style={styles.userText}>{this.state.userName}</Text></View>
+                            <View style={[styles.userBox, styles.userRight]}><Icon name="arrow-forward" style={{color: S.colorRed}}/></View>
+                        </View>
+                    </TouchableHighlight>
                     <List>
                         <Separator bordered style={[styles.separator, styles.separatorNoBorderTop]}>
                             <Text style={styles.separatorTitle}>App</Text>

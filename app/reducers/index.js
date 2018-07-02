@@ -2,7 +2,16 @@ import { combineReducers } from 'redux';
 
 import { AsyncStorage } from 'react-native';
  
-import { DATA_AVAILABLE, ADD_ALARM, REMOVE_ALARM, CHANGE_ALARM, GET_SETTINGS, UPDATE_SETTINGS, RESET_SETTINGS } from "../actions/" //Import the actions types constant we defined in our actions
+import { 
+    DATA_AVAILABLE,
+    ADD_ALARM, 
+    REMOVE_ALARM, 
+    CHANGE_ALARM, 
+    GET_SETTINGS, 
+    UPDATE_SETTINGS, 
+    CHANGE_SETTINGS, 
+    RESET_SETTINGS 
+} from "../actions/" //Import the actions types constant we defined in our actions
  
 let dataState = { data: [], loading:true };
 
@@ -49,6 +58,9 @@ const settingsReducer = (state = settingsState, action) => {
             state = Object.assign({}, state, {...action.settings, loading: false, first});
             return state;
         case UPDATE_SETTINGS:
+            state = Object.assign({}, state, {...action.newSetting});
+            return state;
+        case CHANGE_SETTINGS:
             state = Object.assign({}, state, {...action.newSetting});
             return state;
         case RESET_SETTINGS:
