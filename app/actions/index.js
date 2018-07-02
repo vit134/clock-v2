@@ -51,11 +51,8 @@ export function changeAlarm(id, changingAlarm){
 export function getSettings(newSetting){
     return (dispatch) => {
         getKey().then(value => {
-            
-            //console.log('actions', JSON.parse(value));
             return dispatch({type: GET_SETTINGS, settings: JSON.parse(value)})
         })
-        //dispatch({type: GET_SETTINGS, newSetting});
     };
 }
 

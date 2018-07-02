@@ -113,7 +113,7 @@ export default class Settings extends Component {
                         </ListItem>
                         <ListItem onPress={this.resetAlert} style={{borderBottomWidth: 0}}>
                             <Left><Text>Reset settings</Text></Left>
-                            <Right><Icon name="arrow-forward" style={{color: S.colorRed}}/></Right>
+                            <Right><Icon name="alert" style={{color: S.colorRed}}/></Right>
                         </ListItem>
                         <Separator bordered style={styles.separator}>
                             <Text style={styles.separatorTitle}>Clock</Text>
@@ -136,7 +136,7 @@ export default class Settings extends Component {
                         </ListItem>
                         <ListItem>
                             <Left><Text>Quiet mode</Text></Left>
-                            <Right><Icon name="arrow-forward" style={{color: S.colorRed}}/></Right>
+                            <Right><Switch /></Right>
                         </ListItem>
                     </List>
                 </Content>
