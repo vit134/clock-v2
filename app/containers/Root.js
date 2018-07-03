@@ -23,6 +23,7 @@ import LoginStep4 from '../components/Login/LoginStep4';
 import Settings from '../components/Settings/Settings';
 import SettingsUser from '../components/Settings/SettingsUser';
 import SettingsTime from '../components/Settings/SettingsTime';
+import SettingsFontColor from '../components/Settings/SettingsFontColor';
 
 import { gs, colorRed } from 'globalStyles';
 
@@ -92,10 +93,11 @@ class Root extends Component {
                                 <Scene key="alarmTitleModal" component={AlarmTitleModal} direction="vertical" title="Title" hideNavBar />
                                 <Scene key="alarmRepeatModal" component={AlarmRepeatModal} direction="vertical" hideNavBar />
                             </Scene>
-                            <Scene  key="settings" title="Settings" iconName="ios-settings" icon={TabIcon} hideNavBar>
+                            <Scene initial key="settings" title="Settings" iconName="ios-settings" icon={TabIcon} hideNavBar>
                                 <Scene initial key="settings-all" component={Settings} title="Settings" />
                                 <Scene key="settingsUser" component={SettingsUser} title="User settings" back={true} hideNavBar={false}/>
                                 <Scene key="settingsTime" component={SettingsTime} title="User time" back={true} hideNavBar={false}/>
+                                <Scene initial key="settingsFontColor" component={SettingsFontColor} title="Font color" back={true} hideNavBar={false}/>
                             </Scene>
                         </Scene>
                     </Scene>

@@ -138,7 +138,7 @@ export default class Settings extends Component {
                                 </Picker>
                             </Right>
                         </ListItem>
-                        <ListItem>
+                        <ListItem onPress={() => {Actions.settingsFontColor()}}>
                             <Left><Text>Font color</Text></Left>
                             <Right><Icon name="arrow-forward" style={{color: S.colorRed}}/></Right>
                         </ListItem>
