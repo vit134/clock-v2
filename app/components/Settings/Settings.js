@@ -26,6 +26,8 @@ export default class Settings extends Component {
 
         this.changeState = this.changeState.bind(this)
         this.resetAlert = this.resetAlert.bind(this)
+
+        //console.log('settings state', this.state);
     }
 
 
@@ -140,7 +142,10 @@ export default class Settings extends Component {
                         </ListItem>
                         <ListItem onPress={() => {Actions.settingsFontColor()}}>
                             <Left><Text>Font color</Text></Left>
-                            <Right><Icon name="arrow-forward" style={{color: S.colorRed}}/></Right>
+                            <Right style={{display: 'flex', flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center' }}>
+                                <View style={{width: 20, height: 20, marginRight: 10, borderRadius: 50, backgroundColor: `#${this.state.fontColor}`}}></View>
+                                <Icon name="arrow-forward" style={{color: S.colorRed}}/>
+                            </Right>
                         </ListItem>
                         <ListItem>
                             <Left><Text>Brightness</Text></Left>

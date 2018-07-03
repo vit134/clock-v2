@@ -97,7 +97,7 @@ class Root extends Component {
                                 <Scene initial key="settings-all" component={Settings} title="Settings" />
                                 <Scene key="settingsUser" component={SettingsUser} title="User settings" back={true} hideNavBar={false}/>
                                 <Scene key="settingsTime" component={SettingsTime} title="User time" back={true} hideNavBar={false}/>
-                                <Scene initial key="settingsFontColor" component={SettingsFontColor} title="Font color" back={true} hideNavBar={false}/>
+                                <Scene key="settingsFontColor" component={SettingsFontColor} title="Font color"/>
                             </Scene>
                         </Scene>
                     </Scene>
