@@ -116,13 +116,27 @@ export default class Settings extends Component {
                         <Separator bordered style={styles.separator}>
                             <Text style={styles.separatorTitle}>Clock</Text>
                         </Separator>
-                        <ListItem>
+                        <ListItem onPress={() => Actions.settingsTime()}>
                             <Left><Text>Time</Text></Left>
                             <Right><Icon name="arrow-forward" style={{color: S.colorRed}}/></Right>
                         </ListItem>
-                        <ListItem>
+                        <ListItem picker>
                             <Left><Text>Time format</Text></Left>
-                            <Right><Icon name="arrow-forward" style={{color: S.colorRed}}/></Right>
+                            <Right>
+                                <Picker
+                                    mode="dropdown"
+                                    iosIcon={<Icon name="ios-arrow-down-outline" />}
+                                    style={{ width: undefined, height: 40, padding: 0 }}
+                                    placeholder="24H"
+                                    placeholderStyle={{ color: "#bfc6ea" }}
+                                    placeholderIconColor="#007aff"
+                                    selectedValue={this.state.timeFormat}
+                                    onValueChange={(value) => this.changeState('timeFormat', value)}
+                                >
+                                    <Picker.Item label="24H" value="24h" />
+                                    <Picker.Item label="12H" value="12h" />
+                                </Picker>
+                            </Right>
                         </ListItem>
                         <ListItem>
                             <Left><Text>Font color</Text></Left>

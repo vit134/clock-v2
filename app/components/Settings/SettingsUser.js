@@ -10,6 +10,7 @@ import { Container, Content, Icon, Button } from 'native-base';
 
 import { gs, colorRed } from 'globalStyles';
 import NavBar from '../NavBar';
+
 import store from '../../store';
 import { changeSettings } from '../../actions';
 

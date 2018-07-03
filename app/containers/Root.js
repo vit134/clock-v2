@@ -22,6 +22,7 @@ import LoginStep4 from '../components/Login/LoginStep4';
 
 import Settings from '../components/Settings/Settings';
 import SettingsUser from '../components/Settings/SettingsUser';
+import SettingsTime from '../components/Settings/SettingsTime';
 
 import { gs, colorRed } from 'globalStyles';
 
@@ -60,8 +61,6 @@ class Root extends Component {
     }
 
     render() {
-      console.log('root props', this.props.first, this.props.loading)
-      //console.log('root store', store.getState().settingsReducer)
       return (
         <View style={{height: '100%'}}>
             { this.props.loading 
@@ -96,6 +95,7 @@ class Root extends Component {
                             <Scene  key="settings" title="Settings" iconName="ios-settings" icon={TabIcon} hideNavBar>
                                 <Scene initial key="settings-all" component={Settings} title="Settings" />
                                 <Scene key="settingsUser" component={SettingsUser} title="User settings" back={true} hideNavBar={false}/>
+                                <Scene key="settingsTime" component={SettingsTime} title="User time" back={true} hideNavBar={false}/>
                             </Scene>
                         </Scene>
                     </Scene>
