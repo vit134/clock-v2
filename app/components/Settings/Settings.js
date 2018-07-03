@@ -22,6 +22,7 @@ export default class Settings extends Component {
         super(props);
 
         this.state = {...store.getState().settingsReducer};
+        this.unsubscribe = store.subscribe(() => {});
 
         this.changeState = this.changeState.bind(this)
         this.resetAlert = this.resetAlert.bind(this)
