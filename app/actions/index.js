@@ -74,7 +74,6 @@ export function updateSettings(newSetting){
 
 export function changeSettings(newSetting, oldSettings){
     return (dispatch) => {
-        //dispatch({type: CHANGE_SETTINGS, newSetting, oldSettings});
         let newSettings = JSON.stringify(Object.assign({}, oldSettings, newSetting));
         
         saveKey(newSettings).then(() => dispatch({type: CHANGE_SETTINGS, newSetting}));
