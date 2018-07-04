@@ -21,14 +21,17 @@ import LoginStep3 from '../components/Login/LoginStep3';
 import LoginStep4 from '../components/Login/LoginStep4';
 
 import Settings from '../components/Settings/Settings';
+import SettingsUser from '../components/Settings/SettingsUser';
+import SettingsTime from '../components/Settings/SettingsTime';
+import SettingsFontColor from '../components/Settings/SettingsFontColor';
 
-import { gs } from 'globalStyles';
+import { gs, colorRed } from 'globalStyles';
 
 const TabIcon = ({ focused, title, iconName }) => {
   const color = focused ? '#fc363b' : 'black';
 
   return (
-    <Icon name={iconName} size={30} color={color} />
+    <Icon name={iconName} style={{fontSize: 30, color}} />
   );
 }
 
@@ -59,8 +62,6 @@ class Root extends Component {
     }
 
     render() {
-      console.log('root props', this.props.first, this.props.loading)
-      //console.log('root store', store.getState().settingsReducer)
       return (
         <View style={{height: '100%'}}>
             { this.props.loading 
@@ -72,22 +73,32 @@ class Root extends Component {
                 <Router>
                     <Scene key="home" hideNavBar>
                         <Scene initial={this.props.first ? true : false} key="login" back={true} backTitle={'Back'} navigationBarStyle={styles.loginNavigationBarStyle}>
-                        <Scene key="login_hello" initial component={LoginHello} hideNavBar/>
-                        <Scene key="login_step1" component={LoginStep1}/>
-                        <Scene key="login_step2" component={LoginStep2}/>
-                        <Scene key="login_step3" component={LoginStep3}/>
-                        <Scene key="login_step4" component={LoginStep4}/>
+                            <Scene key="login_hello" initial component={LoginHello} hideNavBar/>
+                            <Scene key="login_step1" component={LoginStep1}/>
+                            <Scene key="login_step2" component={LoginStep2}/>
+                            <Scene key="login_step3" component={LoginStep3}/>
+                            <Scene key="login_step4" component={LoginStep4}/>
                         </Scene>
-                        <Scene initial={this.props.first ? false : true} key="tabbar" tabs tabBarStyle={styles.tabBarStyle} navigationBarStyle={styles.navigationBarStyle} labelStyle={styles.label}>
-                        <Scene key="alarm" title="Alarm" iconName="ios-alarm" icon={TabIcon} >
-                            <Scene key="alarm" component={Alarm} title="Alarm" hideNavBar />
-                            <Scene key="alarmAdd" component={AlarmAdd} title="Add alarm" hideNavBar />
-                            <Scene key="alarmTitleModal" component={AlarmTitleModal} direction="vertical" title="Title" hideNavBar />
-                            <Scene key="alarmRepeatModal" component={AlarmRepeatModal} direction="vertical" hideNavBar />
-                        </Scene>
-                        <Scene  key="settings" title="Settings" iconName="ios-settings" icon={TabIcon} hideNavBar>
-                            <Scene key="settings" component={Settings} title="Settings" />
-                        </Scene>
+                        <Scene 
+                            initial={this.props.first ? false : true} 
+                            key="tabbar" 
+                            tabs 
+                            tabBarStyle={styles.tabBarStyle} 
+                            navigationBarStyle={styles.navigationBarStyle} 
+                            labelStyle={styles.label}
+                            activeTintColor={colorRed}>
+                            <Scene key="alarm" title="Alarm" iconName="ios-alarm" icon={TabIcon} >
+                                <Scene key="alarm" component={Alarm} title="Alarm" hideNavBar />
+                                <Scene key="alarmAdd" component={AlarmAdd} title="Add alarm" hideNavBar />
+                                <Scene key="alarmTitleModal" component={AlarmTitleModal} direction="vertical" title="Title" hideNavBar />
+                                <Scene key="alarmRepeatModal" component={AlarmRepeatModal} direction="vertical" hideNavBar />
+                            </Scene>
+                            <Scene initial key="settings" title="Settings" iconName="ios-settings" icon={TabIcon} hideNavBar>
+                                <Scene initial key="settings-all" component={Settings} title="Settings" />
+                                <Scene key="settingsUser" component={SettingsUser} title="User settings" back={true} hideNavBar={false}/>
+                                <Scene key="settingsTime" component={SettingsTime} title="User time" back={true} hideNavBar={false}/>
+                                <Scene key="settingsFontColor" component={SettingsFontColor} title="Font color"/>
+                            </Scene>
                         </Scene>
                     </Scene>
                 </Router>

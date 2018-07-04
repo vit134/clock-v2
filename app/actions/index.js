@@ -4,6 +4,7 @@ export const REMOVE_ALARM = 'REMOVE_ALARM';
 export const CHANGE_ALARM = 'CHANGE_ALARM';
 export const GET_SETTINGS = 'GET_SETTINGS';
 export const UPDATE_SETTINGS = 'UPDATE_SETTINGS';
+export const CHANGE_SETTINGS = 'CHANGE_SETTINGS';
 export const RESET_SETTINGS = 'RESET_SETTINGS';
 
 import { AsyncStorage } from 'react-native';
@@ -18,6 +19,14 @@ async function getKey() {
         console.log("Error retrieving data" + error);
     }
 };
+
+async function saveKey(value) {
+    try {
+        await AsyncStorage.setItem('settings', value);
+    } catch (error) {
+        console.log("Error saving data" + error);
+    }
+}
  
 export function getData(){
     return (dispatch) => {
@@ -59,6 +68,15 @@ export function getSettings(newSetting){
 export function updateSettings(newSetting){
     return (dispatch) => {
         dispatch({type: UPDATE_SETTINGS, newSetting});
+        //saveKey()
+    };
+}
+
+export function changeSettings(newSetting, oldSettings){
+    return (dispatch) => {
+        let newSettings = JSON.stringify(Object.assign({}, oldSettings, newSetting));
+        
+        saveKey(newSettings).then(() => dispatch({type: CHANGE_SETTINGS, newSetting}));
     };
 }
 
