@@ -17,9 +17,9 @@ let dataState = { data: [], loading:true };
 
 let settingsState = {loading: true, first: true};
 
-async function saveKey(value) {
+async function saveKey(key, value) {
   try {
-      await AsyncStorage.setItem('settings', JSON.stringify(value));
+      await AsyncStorage.setItem(key, JSON.stringify(value));
   } catch (error) {
       console.log("Error saving data" + error);
   }
@@ -32,10 +32,14 @@ const dataReducer = (state = dataState, action) => {
             return state;
         case ADD_ALARM:
             state = Object.assign({}, state, { data: state.data.concat(action.newAlarm) });
-            return state;
+
+            saveKey('alarms', state.data)
+                .then(() => state)
         case REMOVE_ALARM:
             state = Object.assign({}, state, { data: state.data.filter(el => el.id !== action.id) });
-            return state;
+
+            saveKey('alarms', state.data)
+                .then(() => state);
         case CHANGE_ALARM:
             state = Object.assign({}, state, { data: state.data.map(el => {
                 if (el.id === action.id) {
@@ -44,7 +48,9 @@ const dataReducer = (state = dataState, action) => {
                     return el;
                 }
             })});
-            return state;
+
+            saveKey('alarms', state.data)
+                .then(() => state)
         default:
             return state;
     }
@@ -62,7 +68,9 @@ const settingsReducer = (state = settingsState, action) => {
             return state;
         case CHANGE_SETTINGS:
             state = Object.assign({}, state, {...action.newSetting});
-            return state;
+
+            saveKey('settings', state)
+                .then(() => state)
         case RESET_SETTINGS:
             state.settings = {};
             return state;

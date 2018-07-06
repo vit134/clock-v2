@@ -53,24 +53,31 @@ class Alarm extends Component {
                     rightTitle={'Add'}
                     leftTitle={'Change'}
                 />
-                <ScrollView scrollEnabled={!this.state.isSwiping} style={{minHeight: '100%'}}>
-                    { this.props.loading 
-                    ? 
-                        <View style={styles.activityIndicatorContainer}>
-                            <ActivityIndicator animating={true}/>
-                        </View>
-                    :
-                        
-                        <FlatList
-                            ref='listRef'
-                            data={this.props.data}
-                            renderItem={this.renderItem}
-                            keyExtractor={(item, index) => {
-                                return item.id.toString()
-                            }}
-                        />
-                    }
-                </ScrollView>
+                { this.props.data.length > 0 
+                ? 
+                    <ScrollView scrollEnabled={!this.state.isSwiping} style={{minHeight: '100%'}}>
+                        { this.props.loading 
+                        ? 
+                            <View style={styles.activityIndicatorContainer}>
+                                <ActivityIndicator animating={true}/>
+                            </View>
+                        :
+                            
+                            <FlatList
+                                ref='listRef'
+                                data={this.props.data}
+                                renderItem={this.renderItem}
+                                keyExtractor={(item, index) => {
+                                    return item.id.toString()
+                                }}
+                            />
+                        }
+                    </ScrollView>
+                :
+                    <View style={[gs.container, {alignItems: 'center', justifyContent: 'center'}]}>
+                        <Text>No alarms</Text>
+                    </View>
+                }
             </Container>
         )
     }

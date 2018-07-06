@@ -12,17 +12,17 @@ import { AsyncStorage } from 'react-native';
 //Import the sample data
 import Data from '../alarms';
 
-async function getKey() {
+async function getKey(key) {
     try {
-        return await AsyncStorage.getItem('settings');
+        return await AsyncStorage.getItem(key);
     } catch (error) {
         console.log("Error retrieving data" + error);
     }
 };
 
-async function saveKey(value) {
+async function saveKey(key, value) {
     try {
-        await AsyncStorage.setItem('settings', value);
+        await AsyncStorage.setItem(key, value);
     } catch (error) {
         console.log("Error saving data" + error);
     }
@@ -30,12 +30,16 @@ async function saveKey(value) {
  
 export function getData(){
     return (dispatch) => {
-        setTimeout(() => {
-            const data = Data;
-            dispatch({type: DATA_AVAILABLE, data:data});
-        }, 100);
 
-        //getKey().then(value => dispatch({type: DATA_AVAILABLE, data: value}))
+        getKey('alarms').then(value => {
+            let alarms = JSON.parse(value);
+
+            if (!alarms.length) {
+                alarms = [];
+            }
+
+            dispatch({type: DATA_AVAILABLE, data: alarms})
+        })
     };
 }
 
@@ -59,7 +63,7 @@ export function changeAlarm(id, changingAlarm){
 
 export function getSettings(newSetting){
     return (dispatch) => {
-        getKey().then(value => {
+        getKey('settings').then(value => {
             return dispatch({type: GET_SETTINGS, settings: JSON.parse(value)})
         })
     };
@@ -68,7 +72,6 @@ export function getSettings(newSetting){
 export function updateSettings(newSetting){
     return (dispatch) => {
         dispatch({type: UPDATE_SETTINGS, newSetting});
-        //saveKey()
     };
 }
 
@@ -76,7 +79,7 @@ export function changeSettings(newSetting, oldSettings){
     return (dispatch) => {
         let newSettings = JSON.stringify(Object.assign({}, oldSettings, newSetting));
         
-        saveKey(newSettings).then(() => dispatch({type: CHANGE_SETTINGS, newSetting}));
+        dispatch({type: CHANGE_SETTINGS, newSetting});
     };
 }
 

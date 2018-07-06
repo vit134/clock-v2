@@ -24,7 +24,7 @@ class AlarmAdd extends Component {
         if (this.props.new) {
             let data  = store.getState().dataReducer.data;
             this.state = {
-                id: data && data.length > 1 ? data[data.length - 1].id + 1 : 0,
+                id: data && data.length === 0 ? 0 : data[data.length - 1].id + 1,
                 time: new Date(),
                 title: 'Alarm',
                 enabled: true,
