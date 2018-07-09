@@ -89,11 +89,8 @@ export default class SettingsFontColor extends Component{
                 <View style={[gs.container]}>
                     <View style={styles.container}>
                         <View style={styles.clock}>
-                            <Text style={[styles.clockText, {color: this.state.fontColor ? tinycolor(this.state.fontColor).toHexString() : '#222'}]}>{`${new Date().getHours()} : ${new Date().getMinutes()}`}</Text>
+                            <Text style={[styles.clockText, {color: this.state.fontColor ? tinycolor(this.state.fontColor).toHexString() : '#222'}]}>12:24</Text>
                         </View>
-                        {/* <View style={styles.currentColor}>
-                            <TextInput  style={styles.currentColorInput} value={this.state.color ? tinycolor(this.state.color).toHexString() : '#222'} />
-                        </View> */}
                         <View style={styles.gradient}>
                             <View style={styles.gradientInner}>
                                 <HueSlider
@@ -165,7 +162,9 @@ const styles = StyleSheet.create({
     },
     clockText: {
         fontSize: 82,
-        fontWeight: '700'
+        fontWeight: '700',
+        fontFamily: 'DSEG-bold',
+        textAlign: 'left'
     },
     currentColor: {
         height: '10%',

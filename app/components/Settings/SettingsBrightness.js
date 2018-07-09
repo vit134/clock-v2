@@ -67,6 +67,7 @@ const styles = StyleSheet.create({
     text: {
         fontSize: 100,
         textAlign: 'center',
-        marginBottom: 40
+        marginBottom: 40,
+        fontFamily: 'DSEG-bold',
     }
 });

@@ -7,6 +7,7 @@ import {
     Alert,
     TouchableHighlight
 } from 'react-native';
+import { Font } from 'expo';
 import { Container, Content, Icon, List, ListItem, Left, Right, Separator, Body, Picker, Thumbnail } from 'native-base';
 
 import { Actions } from 'react-native-router-flux';
@@ -171,6 +172,7 @@ const styles = StyleSheet.create({
     },
     separatorTitle: {
         fontWeight: '500',
+        //fontFamily: 'DSEG7Classic-Bold'
     },
     user: {
         flex: 1, 
