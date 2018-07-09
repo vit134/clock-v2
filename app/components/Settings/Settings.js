@@ -137,16 +137,19 @@ export default class Settings extends Component {
                                 </Picker>
                             </Right>
                         </ListItem>
-                        <ListItem onPress={() => {Actions.settingsFontColor()}}>
+                        <ListItem onPress={() => Actions.settingsFontColor()}>
                             <Left><Text>Font color</Text></Left>
                             <Right style={{display: 'flex', flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center' }}>
                                 <View style={{width: 20, height: 20, marginRight: 10, borderRadius: 50, backgroundColor: `#${this.state.fontColor}`}}></View>
                                 <Icon name="arrow-forward" style={{color: colorRed}}/>
                             </Right>
                         </ListItem>
-                        <ListItem>
+                        <ListItem onPress={() => Actions.settingsBrightness()}>
                             <Left><Text>Brightness</Text></Left>
-                            <Right><Icon name="arrow-forward" style={{color: colorRed}}/></Right>
+                            <Right style={{display: 'flex', flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center' }}>
+                                <Text style={{marginRight: 10}}>{this.state.brightness || 60}</Text>
+                                <Icon name="arrow-forward" style={{color: colorRed}}/>
+                            </Right>
                         </ListItem>
                         <ListItem>
                             <Left><Text>Quiet mode</Text></Left>
