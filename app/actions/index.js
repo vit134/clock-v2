@@ -6,6 +6,9 @@ export const GET_SETTINGS = 'GET_SETTINGS';
 export const UPDATE_SETTINGS = 'UPDATE_SETTINGS';
 export const CHANGE_SETTINGS = 'CHANGE_SETTINGS';
 export const RESET_SETTINGS = 'RESET_SETTINGS';
+export const GET_HOME_SETTINGS = 'GET_HOME_SETTINGS';
+export const UPDATE_HOME_SETTINGS = 'UPDATE_HOME_SETTINGS';
+export const RESET_HOME_SETTINGS = 'RESET_HOME_SETTINGS';
 
 import { AsyncStorage } from 'react-native';
 
@@ -78,7 +81,6 @@ export function updateSettings(newSetting){
 export function changeSettings(newSetting, oldSettings){
     return (dispatch) => {
         let newSettings = JSON.stringify(Object.assign({}, oldSettings, newSetting));
-        
         dispatch({type: CHANGE_SETTINGS, newSetting});
     };
 }
@@ -86,6 +88,25 @@ export function changeSettings(newSetting, oldSettings){
 export function resetSettings(){
     return (dispatch) => {
         dispatch({type: RESET_SETTINGS});
+    };
+}
+
+export function getHomeSettings(){
+    return (dispatch) => {
+        
+        getKey('settings').then(value => {
+            let settings = JSON.parse(value);
+            let first = false;
+
+            if (!settings.userName) {
+                first = true;
+            }
+
+            settings.first = first;
+            settings.loading = false;
+
+            dispatch({type: GET_HOME_SETTINGS, homeSettings: {first, loading: false}});
+        });
     };
 }
 

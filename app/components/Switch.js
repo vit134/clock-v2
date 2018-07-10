@@ -11,11 +11,15 @@ export default class SwitchComp extends Component {
     
     toggleSwitch(value) {
         this.setState({switchEnabled: value})
+
+        if (this.props.cb) {
+            this.props.cb(value);
+        }
     }
 
     render(){
         return (
-            <Switch onValueChange={this.toggleSwitch.bind(this)} value = {this.state.switchEnabled}/>
+            <Switch onValueChange={this.toggleSwitch.bind(this)} value={this.state.switchEnabled}/>
         )
     }
 }

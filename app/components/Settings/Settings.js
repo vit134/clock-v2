@@ -5,24 +5,27 @@ import {
     View,
     AsyncStorage,
     Alert,
-    TouchableHighlight
+    TouchableHighlight,
+    Switch
 } from 'react-native';
+import { Font } from 'expo';
 import { Container, Content, Icon, List, ListItem, Left, Right, Separator, Body, Picker, Thumbnail } from 'native-base';
 
 import { Actions } from 'react-native-router-flux';
-import { resetSettings, changeSettings } from '../../actions';
+
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import * as ActionsRedux from '../../actions';
 import store from '../../store';
 
 import { gs, colorRed } from 'globalStyles';
 import NavBar from '../NavBar';
-import Switch from '../Switch';
 
-export default class Settings extends Component {
+class Settings extends Component {
     constructor(props) {
         super(props);
 
-        this.state = {...store.getState().settingsReducer};
-        this.unsubscribe = store.subscribe(() => {});
+        this.state = {};
 
         this.changeState = this.changeState.bind(this);
         this.resetAlert = this.resetAlert.bind(this);
@@ -33,7 +36,9 @@ export default class Settings extends Component {
             [key]: value
         });
         
-        store.dispatch(changeSettings({[key]: value}, store.getState().settingsReducer));
+        store.dispatch(ActionsRedux.changeSettings({[key]: value}, store.getState().settingsReducer));
+
+        console.log(store.getState())
     }
 
     resetAlert() {
@@ -49,14 +54,17 @@ export default class Settings extends Component {
     }
 
     reset() {
-        saveKey(JSON.stringify({})).then(() => {
-            store.dispatch(resetSettings());
-            Actions.login();
-        });
+        store.dispatch(ActionsRedux.resetSettings());
+        Actions.login();
+    }
 
+    componentDidMount() {
+        this.props.getSettings()
     }
 
     render() {
+        const settings = this.props.settings;
+        
         return (
             <Container style={gs.container}>
                 <NavBar title={'Settings'} />
@@ -64,25 +72,27 @@ export default class Settings extends Component {
                     <TouchableHighlight onPress={() => Actions.settingsUser()}>
                         <View style={styles.user}>
                             <View style={styles.userBox}><Thumbnail square source={require('./default_avatar.png')} /></View>
-                            <View style={[styles.userBox, styles.userBody]}><Text style={styles.userText}>{this.state.userName}</Text></View>
-                            <View style={[styles.userBox, styles.userRight]}><Icon name="arrow-forward" style={{color: colorRed}}/></View>
+                            <View style={[styles.userBox, styles.userBody]}><Text style={styles.userText}>{settings.userName}</Text></View>
+                            <View style={[styles.userBox, styles.userRight]}><Icon name="arrow-forward" style={{color: colorRed, marginRight: 3}}/></View>
                         </View>
                     </TouchableHighlight>
                     <List>
                         <Separator bordered style={[styles.separator, styles.separatorNoBorderTop]}>
                             <Text style={styles.separatorTitle}>App</Text>
                         </Separator>
-                        <ListItem picker>
+                        <ListItem picker style={styles.listItemPicker}>
                             <Left><Text>Color theme</Text></Left>
                             <Right>
                                 <Picker
                                     mode="dropdown"
-                                    iosIcon={<Icon name="ios-arrow-down-outline" style={{color: colorRed}}/>}
-                                    style={{ width: undefined, height: 40, padding: 0 }}
+                                    iosIcon={<Icon name="ios-arrow-down-outline" style={{color: colorRed, marginLeft: 10}}/>}
+                                    style={styles.picker}
+                                    headerStyle={styles.pickerHeader}
                                     placeholder="Light"
-                                    placeholderStyle={{ color: "#bfc6ea" }}
+                                    placeholderStyle={styles.pickerPlaceholder}
+                                    textStyle={styles.pickerText}
                                     placeholderIconColor="#007aff"
-                                    selectedValue={this.state.theme}
+                                    selectedValue={settings.theme}
                                     onValueChange={(value) => this.changeState('theme', value)}
                                 >
                                     <Picker.Item label="Light" value="light" />
@@ -90,17 +100,19 @@ export default class Settings extends Component {
                                 </Picker>
                             </Right>
                         </ListItem>
-                        <ListItem picker>
+                        <ListItem picker style={styles.listItemPicker}>
                             <Left><Text>Language</Text></Left>
                             <Right>
                                 <Picker
                                     mode="dropdown"
-                                    iosIcon={<Icon name="ios-arrow-down-outline" style={{color: colorRed}} />}
-                                    style={{ width: undefined, height: 40, padding: 0 }}
+                                    iosIcon={<Icon name="ios-arrow-down-outline" style={{color: colorRed, marginLeft: 10}} />}
+                                    style={styles.picker}
+                                    headerStyle={styles.pickerHeader}
                                     placeholder="Ru"
-                                    placeholderStyle={{ color: "#bfc6ea" }}
+                                    placeholderStyle={styles.pickerPlaceholder}
+                                    textStyle={styles.pickerText}
                                     placeholderIconColor="#007aff"
-                                    selectedValue={this.state.language}
+                                    selectedValue={settings.language}
                                     onValueChange={(value) => this.changeState('language', value)}
                                 >
                                     <Picker.Item label="Russian" value="ru" />
@@ -117,19 +129,21 @@ export default class Settings extends Component {
                         </Separator>
                         <ListItem onPress={() => Actions.settingsTime()}>
                             <Left><Text>Time</Text></Left>
-                            <Right><Icon name="arrow-forward" style={{color: colorRed}}/></Right>
+                            <Right><Icon name="arrow-forward" style={{color: colorRed, marginRight: 3}}/></Right>
                         </ListItem>
-                        <ListItem picker>
+                        <ListItem picker style={styles.listItemPicker}>
                             <Left><Text>Time format</Text></Left>
                             <Right>
                                 <Picker
                                     mode="dropdown"
-                                    iosIcon={<Icon name="ios-arrow-down-outline" style={{color: colorRed}} />}
-                                    style={{ width: undefined, height: 40, padding: 0 }}
+                                    iosIcon={<Icon name="ios-arrow-down-outline" style={{color: colorRed, marginLeft: 10}} />}
+                                    style={styles.picker}
+                                    headerStyle={styles.pickerHeader}
                                     placeholder="24H"
-                                    placeholderStyle={{ color: "#bfc6ea" }}
+                                    placeholderStyle={styles.pickerPlaceholder}
+                                    textStyle={styles.pickerText}
                                     placeholderIconColor="#007aff"
-                                    selectedValue={this.state.timeFormat}
+                                    selectedValue={settings.timeFormat}
                                     onValueChange={(value) => this.changeState('timeFormat', value)}
                                 >
                                     <Picker.Item label="24H" value="24h" />
@@ -140,26 +154,34 @@ export default class Settings extends Component {
                         <ListItem onPress={() => Actions.settingsFontColor()}>
                             <Left><Text>Font color</Text></Left>
                             <Right style={{display: 'flex', flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center' }}>
-                                <View style={{width: 20, height: 20, marginRight: 10, borderRadius: 50, backgroundColor: `#${this.state.fontColor}`}}></View>
-                                <Icon name="arrow-forward" style={{color: colorRed}}/>
+                                <View style={{width: 20, height: 20, marginRight: 10, borderRadius: 50, backgroundColor: `#${settings.fontColor || '222'}`}}></View>
+                                <Icon name="arrow-forward" style={{color: colorRed, marginRight: 3}}/>
                             </Right>
                         </ListItem>
                         <ListItem onPress={() => Actions.settingsBrightness()}>
                             <Left><Text>Brightness</Text></Left>
                             <Right style={{display: 'flex', flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center' }}>
-                                <Text style={{marginRight: 10}}>{this.state.brightness || 60}</Text>
-                                <Icon name="arrow-forward" style={{color: colorRed}}/>
+                                <Text style={{marginRight: 10, fontSize: 16.5}}>{settings.brightness || 60}</Text>
+                                <Icon name="arrow-forward" style={{color: colorRed, marginRight: 3}}/>
                             </Right>
                         </ListItem>
                         <ListItem>
                             <Left><Text>Quiet mode</Text></Left>
-                            <Right><Switch /></Right>
+                            <Right><Switch onValueChange={(value) => this.changeState('quiet_mode', value)} value={settings.quiet_mode}/></Right>
                         </ListItem>
                     </List>
                 </Content>
             </Container>
         );
     }
+}
+
+function mapStateToProps(state, props) {
+    return {settings: {...state.settingsReducer}};
+}
+
+function mapDispatchToProps(dispatch) {
+    return bindActionCreators(ActionsRedux, dispatch);
 }
 
 const styles = StyleSheet.create({
@@ -169,8 +191,25 @@ const styles = StyleSheet.create({
     separatorNoBorderTop: {
         borderTopWidth: 0
     },
+    listItemPicker: {
+        height: 50
+    },
+    picker: {
+        width: undefined, 
+        height: 40, 
+        padding: 0 
+    },
+    pickerHeader: {
+        paddingLeft: 20
+    },
+    pickerPlaceholder: {
+        color: "#bfc6ea"
+    },
+    pickerText: {
+        paddingRight: 0 
+    },
     separatorTitle: {
-        fontWeight: '500',
+        fontWeight: '500'
     },
     user: {
         flex: 1, 
@@ -198,3 +237,5 @@ const styles = StyleSheet.create({
         fontSize: 18
     }
 });
+
+export default connect(mapStateToProps, mapDispatchToProps)(Settings);

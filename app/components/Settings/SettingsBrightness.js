@@ -65,8 +65,9 @@ const styles = StyleSheet.create({
         height: '100%'
     },
     text: {
-        fontSize: 100,
+        fontSize: 120,
         textAlign: 'center',
-        marginBottom: 40
+        marginBottom: 40,
+        fontFamily: 'digital',
     }
 });

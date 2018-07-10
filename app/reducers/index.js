@@ -10,12 +10,14 @@ import {
     GET_SETTINGS, 
     UPDATE_SETTINGS, 
     CHANGE_SETTINGS, 
-    RESET_SETTINGS 
-} from "../actions/" //Import the actions types constant we defined in our actions
+    RESET_SETTINGS,
+    GET_HOME_SETTINGS
+} from "../actions/";
  
 let dataState = { data: [], loading:true };
 
-let settingsState = {loading: true, first: true};
+let settingsState = {timeFormat: '24h'};
+let homeState = {loading: true, first: true};
 
 async function saveKey(key, value) {
   try {
@@ -33,13 +35,14 @@ const dataReducer = (state = dataState, action) => {
         case ADD_ALARM:
             state = Object.assign({}, state, { data: state.data.concat(action.newAlarm) });
 
-            saveKey('alarms', state.data)
-                .then(() => state)
+            saveKey('alarms', state.data).then(() => state)
+            return state;
         case REMOVE_ALARM:
             state = Object.assign({}, state, { data: state.data.filter(el => el.id !== action.id) });
 
-            saveKey('alarms', state.data)
-                .then(() => state);
+            saveKey('alarms', state.data).then(() => state);
+            
+            return state;
         case CHANGE_ALARM:
             state = Object.assign({}, state, { data: state.data.map(el => {
                 if (el.id === action.id) {
@@ -49,8 +52,9 @@ const dataReducer = (state = dataState, action) => {
                 }
             })});
 
-            saveKey('alarms', state.data)
-                .then(() => state)
+            saveKey('alarms', state.data).then(() => state)
+
+            return state;
         default:
             return state;
     }
@@ -68,11 +72,21 @@ const settingsReducer = (state = settingsState, action) => {
             return state;
         case CHANGE_SETTINGS:
             state = Object.assign({}, state, {...action.newSetting});
-
-            saveKey('settings', state)
-                .then(() => state)
+            saveKey('settings', state);
+            return state;
         case RESET_SETTINGS:
-            state.settings = {};
+            state = {};
+            saveKey('settings', JSON.stringify(state)).then(() => state)
+            return state;
+        default:
+            return state;
+    }
+};
+
+const homeSettingsReducer = (state = homeState, action) => {
+    switch (action.type) {
+        case GET_HOME_SETTINGS:
+            state = Object.assign({}, state, {...action.homeSettings, loading: false});
             return state;
         default:
             return state;
@@ -82,7 +96,8 @@ const settingsReducer = (state = settingsState, action) => {
 // Combine all the reducers
 const rootReducer = combineReducers({
     dataReducer,
-    settingsReducer
+    settingsReducer,
+    homeSettingsReducer
     // ,[ANOTHER REDUCER], [ANOTHER REDUCER] ....
 })
  
