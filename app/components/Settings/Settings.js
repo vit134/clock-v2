@@ -86,10 +86,11 @@ class Settings extends Component {
                                 <Picker
                                     mode="dropdown"
                                     iosIcon={<Icon name="ios-arrow-down-outline" style={{color: colorRed, marginLeft: 10}}/>}
-                                    style={{ width: undefined, height: 40, padding: 0 }}
+                                    style={styles.picker}
+                                    headerStyle={styles.pickerHeader}
                                     placeholder="Light"
-                                    placeholderStyle={{ color: "#bfc6ea" }}
-                                    textStyle={{ paddingRight: 0 }}
+                                    placeholderStyle={styles.pickerPlaceholder}
+                                    textStyle={styles.pickerText}
                                     placeholderIconColor="#007aff"
                                     selectedValue={settings.theme}
                                     onValueChange={(value) => this.changeState('theme', value)}
@@ -105,10 +106,11 @@ class Settings extends Component {
                                 <Picker
                                     mode="dropdown"
                                     iosIcon={<Icon name="ios-arrow-down-outline" style={{color: colorRed, marginLeft: 10}} />}
-                                    style={{ width: undefined, height: 40, padding: 0 }}
+                                    style={styles.picker}
+                                    headerStyle={styles.pickerHeader}
                                     placeholder="Ru"
-                                    placeholderStyle={{ color: "#bfc6ea" }}
-                                    textStyle={{ paddingRight: 0 }}
+                                    placeholderStyle={styles.pickerPlaceholder}
+                                    textStyle={styles.pickerText}
                                     placeholderIconColor="#007aff"
                                     selectedValue={settings.language}
                                     onValueChange={(value) => this.changeState('language', value)}
@@ -135,10 +137,11 @@ class Settings extends Component {
                                 <Picker
                                     mode="dropdown"
                                     iosIcon={<Icon name="ios-arrow-down-outline" style={{color: colorRed, marginLeft: 10}} />}
-                                    style={{ width: undefined, height: 40, padding: 0 }}
+                                    style={styles.picker}
+                                    headerStyle={styles.pickerHeader}
                                     placeholder="24H"
-                                    placeholderStyle={{ color: "#bfc6ea" }}
-                                    textStyle={{ paddingRight: 0 }}
+                                    placeholderStyle={styles.pickerPlaceholder}
+                                    textStyle={styles.pickerText}
                                     placeholderIconColor="#007aff"
                                     selectedValue={settings.timeFormat}
                                     onValueChange={(value) => this.changeState('timeFormat', value)}
@@ -190,6 +193,20 @@ const styles = StyleSheet.create({
     },
     listItemPicker: {
         height: 50
+    },
+    picker: {
+        width: undefined, 
+        height: 40, 
+        padding: 0 
+    },
+    pickerHeader: {
+        paddingLeft: 20
+    },
+    pickerPlaceholder: {
+        color: "#bfc6ea"
+    },
+    pickerText: {
+        paddingRight: 0 
     },
     separatorTitle: {
         fontWeight: '500'
