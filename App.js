@@ -19,7 +19,8 @@ class App extends Component {
       Font.loadAsync({
         'DSEG': require('./app/assets/fonts/DSEG7Classic-Regular.ttf'),
         'DSEG-light': require('./app/assets/fonts/DSEG7Classic-Light.ttf'),
-        'DSEG-bold': require('./app/assets/fonts/DSEG7Classic-Bold.ttf')
+        'DSEG-bold': require('./app/assets/fonts/DSEG7Classic-Bold.ttf'),
+        'digital': require('./app/assets/fonts/digital-7.ttf')
       });
   }
 

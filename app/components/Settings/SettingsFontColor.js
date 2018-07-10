@@ -34,7 +34,6 @@ export default class SettingsFontColor extends Component{
         super(props);
         const state = store.getState().settingsReducer;
         this.state = {
-            //...store.getState().settingsReducer,
             fontColorRecents: state.fontColorRecents ? state.fontColorRecents : [],
             fontColor: state.fontColor ? tinycolor(state.fontColor).toHsl() : tinycolor('#70c1b3').toHsl()
         }
@@ -44,16 +43,14 @@ export default class SettingsFontColor extends Component{
 
     submit() {
         let recents = this.state.fontColorRecents;
-        let fontColor = tinycolor(this.state.fontColor).toHex()
-        console.log('recents',recents);
+        let fontColor = tinycolor(this.state.fontColor).toHex();
         recents.indexOf(fontColor) >= 0 ? recents : recents.push(fontColor);
 
         store.dispatch(changeSettings({
             fontColor: tinycolor(this.state.fontColor).toHex(),
             fontColorRecents: recents
         }, store.getState().settingsReducer));
-
-        //console.log(store.getState().settingsReducer);
+        
         Actions.pop();
     }
 
@@ -161,9 +158,9 @@ const styles = StyleSheet.create({
         paddingHorizontal: 20
     },
     clockText: {
-        fontSize: 82,
+        fontSize: 120,
         fontWeight: '700',
-        fontFamily: 'DSEG-bold',
+        fontFamily: 'digital',
         textAlign: 'left'
     },
     currentColor: {

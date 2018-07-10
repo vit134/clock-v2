@@ -47,7 +47,6 @@ async function getKey(key) {
 class Root extends Component {
     constructor() {
       super();
-      this.unsubscribe = store.subscribe(() => {});
 
       this.state = {
         mounted: false,
@@ -59,59 +58,59 @@ class Root extends Component {
     }
 
     componentDidMount() {
-        this.props.getSettings();
+        this.props.getHomeSettings();
     }
 
     render() {
-      return (
-        <View style={{height: '100%'}}>
-            { this.props.loading 
-            ?
-                <View style={styles.activityIndicatorContainer}>
-                    <ActivityIndicator animating={true}/>
-                </View>
-            :
-                <Router>
-                    <Scene key="home" hideNavBar>
-                        <Scene initial={this.props.first ? true : false} key="login" back={true} backTitle={'Back'} navigationBarStyle={styles.loginNavigationBarStyle}>
-                            <Scene key="login_hello" initial component={LoginHello} hideNavBar/>
-                            <Scene key="login_step1" component={LoginStep1}/>
-                            <Scene key="login_step2" component={LoginStep2}/>
-                            <Scene key="login_step3" component={LoginStep3}/>
-                            <Scene key="login_step4" component={LoginStep4}/>
-                        </Scene>
-                        <Scene 
-                            initial={this.props.first ? false : true} 
-                            key="tabbar" 
-                            tabs 
-                            tabBarStyle={styles.tabBarStyle} 
-                            navigationBarStyle={styles.navigationBarStyle} 
-                            labelStyle={styles.label}
-                            activeTintColor={colorRed}>
-                            <Scene  key="alarm" title="Alarm" iconName="ios-alarm" icon={TabIcon} >
-                                <Scene key="alarm" component={Alarm} title="Alarm" hideNavBar />
-                                <Scene key="alarmAdd" component={AlarmAdd} title="Add alarm" hideNavBar />
-                                <Scene key="alarmTitleModal" component={AlarmTitleModal} direction="vertical" title="Title" hideNavBar />
-                                <Scene key="alarmRepeatModal" component={AlarmRepeatModal} direction="vertical" hideNavBar />
+        return (
+            <View style={{height: '100%'}}>
+                { this.props.loading 
+                ?
+                    <View style={styles.activityIndicatorContainer}>
+                        <ActivityIndicator animating={true}/>
+                    </View>
+                :
+                    <Router>
+                        <Scene key="home" hideNavBar>
+                            <Scene initial={this.props.first ? true : false} key="login" back={true} backTitle={'Back'} navigationBarStyle={styles.loginNavigationBarStyle}>
+                                <Scene key="login_hello" initial component={LoginHello} hideNavBar/>
+                                <Scene key="login_step1" component={LoginStep1}/>
+                                <Scene key="login_step2" component={LoginStep2}/>
+                                <Scene key="login_step3" component={LoginStep3}/>
+                                <Scene key="login_step4" component={LoginStep4}/>
                             </Scene>
-                            <Scene initial key="settings" title="Settings" iconName="ios-settings" icon={TabIcon} hideNavBar>
-                                <Scene initial key="settings-all" component={Settings} title="Settings" />
-                                <Scene key="settingsUser" component={SettingsUser} title="User settings" back={true} hideNavBar={false}/>
-                                <Scene key="settingsTime" component={SettingsTime} title="User time" back={true} hideNavBar={false}/>
-                                <Scene key="settingsFontColor" component={SettingsFontColor} title="Font color"/>
-                                <Scene key="settingsBrightness" component={SettingsBrightness} title="Brightness"/>
+                            <Scene 
+                                initial={this.props.first ? false : true} 
+                                key="tabbar" 
+                                tabs 
+                                tabBarStyle={styles.tabBarStyle} 
+                                navigationBarStyle={styles.navigationBarStyle} 
+                                labelStyle={styles.label}
+                                activeTintColor={colorRed}>
+                                <Scene  key="alarm" title="Alarm" iconName="ios-alarm" icon={TabIcon} >
+                                    <Scene key="alarm" component={Alarm} title="Alarm" hideNavBar />
+                                    <Scene key="alarmAdd" component={AlarmAdd} title="Add alarm" hideNavBar />
+                                    <Scene key="alarmTitleModal" component={AlarmTitleModal} direction="vertical" title="Title" hideNavBar />
+                                    <Scene key="alarmRepeatModal" component={AlarmRepeatModal} direction="vertical" hideNavBar />
+                                </Scene>
+                                <Scene initial key="settings" title="Settings" iconName="ios-settings" icon={TabIcon} hideNavBar>
+                                    <Scene initial key="settings-all" component={Settings} title="Settings" />
+                                    <Scene key="settingsUser" component={SettingsUser} title="User settings" back={true} hideNavBar={false}/>
+                                    <Scene key="settingsTime" component={SettingsTime} title="User time" back={true} hideNavBar={false}/>
+                                    <Scene key="settingsFontColor" component={SettingsFontColor} title="Font color"/>
+                                    <Scene key="settingsBrightness" component={SettingsBrightness} title="Brightness"/>
+                                </Scene>
                             </Scene>
                         </Scene>
-                    </Scene>
-                </Router>
-            }
-        </View>
-      )
+                    </Router>
+                }
+            </View>
+        )
     }
 }
 
 function mapStateToProps(state, props) {
-    return {...state.settingsReducer}
+    return {...state.homeSettingsReducer}
 }
 
 function mapDispatchToProps(dispatch) {

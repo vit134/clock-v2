@@ -81,7 +81,6 @@ export function updateSettings(newSetting){
 export function changeSettings(newSetting, oldSettings){
     return (dispatch) => {
         let newSettings = JSON.stringify(Object.assign({}, oldSettings, newSetting));
-        
         dispatch({type: CHANGE_SETTINGS, newSetting});
     };
 }
@@ -94,7 +93,20 @@ export function resetSettings(){
 
 export function getHomeSettings(){
     return (dispatch) => {
-        dispatch({type: GET_HOME_SETTINGS});
+        
+        getKey('settings').then(value => {
+            let settings = JSON.parse(value);
+            let first = false;
+
+            if (!settings.userName) {
+                first = true;
+            }
+
+            settings.first = first;
+            settings.loading = false;
+
+            dispatch({type: GET_HOME_SETTINGS, homeSettings: {first, loading: false}});
+        });
     };
 }
 
