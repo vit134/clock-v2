@@ -5,7 +5,8 @@ import {
     View,
     AsyncStorage,
     Alert,
-    TouchableHighlight
+    TouchableHighlight,
+    Switch
 } from 'react-native';
 import { Font } from 'expo';
 import { Container, Content, Icon, List, ListItem, Left, Right, Separator, Body, Picker, Thumbnail } from 'native-base';
@@ -19,7 +20,6 @@ import store from '../../store';
 
 import { gs, colorRed } from 'globalStyles';
 import NavBar from '../NavBar';
-import Switch from '../Switch';
 
 class Settings extends Component {
     constructor(props) {
@@ -37,6 +37,8 @@ class Settings extends Component {
         });
         
         store.dispatch(ActionsRedux.changeSettings({[key]: value}, store.getState().settingsReducer));
+
+        console.log(store.getState())
     }
 
     resetAlert() {
@@ -62,6 +64,7 @@ class Settings extends Component {
 
     render() {
         const settings = this.props.settings;
+        
         return (
             <Container style={gs.container}>
                 <NavBar title={'Settings'} />
@@ -161,7 +164,7 @@ class Settings extends Component {
                         </ListItem>
                         <ListItem>
                             <Left><Text>Quiet mode</Text></Left>
-                            <Right><Switch /></Right>
+                            <Right><Switch onValueChange={(value) => this.changeState('quiet_mode', value)} value={settings.quiet_mode}/></Right>
                         </ListItem>
                     </List>
                 </Content>
@@ -189,8 +192,7 @@ const styles = StyleSheet.create({
         height: 50
     },
     separatorTitle: {
-        fontWeight: '500',
-        //fontFamily: 'DSEG7Classic-Bold'
+        fontWeight: '500'
     },
     user: {
         flex: 1, 
