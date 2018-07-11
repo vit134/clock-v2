@@ -37,7 +37,7 @@ export function getData(){
         getKey('alarms').then(value => {
             let alarms = JSON.parse(value);
 
-            if (!alarms.length) {
+            if (!alarms || !alarms.length) {
                 alarms = [];
             }
 
@@ -98,8 +98,9 @@ export function getHomeSettings(){
             let settings = JSON.parse(value);
             let first = false;
 
-            if (!settings.userName) {
+            if (!settings || !settings.userName) {
                 first = true;
+                settings = {};
             }
 
             settings.first = first;

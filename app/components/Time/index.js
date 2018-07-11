@@ -29,7 +29,7 @@ export default class Time extends Component {
         return (
             <Container>
                 <View style={{flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#fff'}}>
-                    <Text style={{fontSize: 130, color: 'red', fontFamily: 'digital' }}>{this.state.time}</Text>
+                    <Text style={{fontSize: 110, color: 'red', fontFamily: 'digital' }}>{this.state.time}</Text>
                 </View>
             </Container>
         )
