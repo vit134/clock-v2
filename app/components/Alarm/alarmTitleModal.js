@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import {
     StyleSheet,
-    Text,
-    View,
     TextInput
 } from 'react-native';
 import { Container, Content } from 'native-base';
@@ -10,7 +8,7 @@ import { Container, Content } from 'native-base';
 import { Actions } from 'react-native-router-flux';
 
 import { gs } from 'globalStyles';
-import NavBar from './NavBar';
+import NavBar from '../NavBar';
 
 class AlarmTitleModal extends Component {
     constructor(props) {

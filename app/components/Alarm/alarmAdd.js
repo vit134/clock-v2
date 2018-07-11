@@ -4,28 +4,27 @@ import {
     Text,
     View,
     DatePickerIOS,
-    TextInput,
-    Button,
     TouchableOpacity
 } from 'react-native';
 import { Container, Content, Icon } from 'native-base';
-
+import moment from 'moment';
 import { Actions } from 'react-native-router-flux';
-import { addAlarm, changeAlarm } from '../actions';
-import store from '../store';
+import { addAlarm, changeAlarm } from '../../actions';
+import store from '../../store';
 
 import { gs } from 'globalStyles';
-import NavBar from './NavBar';
-import Switch from './Switch';
+import NavBar from '../NavBar';
+import Switch from '../Switch';
 
 class AlarmAdd extends Component {
     constructor(props) {
         super(props);
         if (this.props.new) {
-            let data  = store.getState().dataReducer.data;
+            let data = store.getState().dataReducer.data;
+
             this.state = {
-                id: data && data.length === 0 ? 0 : data[data.length - 1].id + 1,
-                time: new Date(),
+                id: data && data.length === 0 ? 0 : data.sort((a, b) => a - b)[data.length - 1].id + 1,
+                time: new Date(`1990-12-05T${new Date().getHours()}:${new Date().getMinutes()}:00.000Z`),
                 title: 'Alarm',
                 enabled: true,
                 repeatSong: false,
@@ -121,23 +120,14 @@ class AlarmAdd extends Component {
 
     saveAlarm() {
         let newAlarm = this.state;
-        newAlarm.timeTitle = `${newAlarm.time.getHours()}:${newAlarm.time.getMinutes() < 10 ? `0${newAlarm.time.getMinutes()}` : newAlarm.time.getMinutes()}`
+        newAlarm.timeTitle = moment(newAlarm.time).format('H:mm');
+
         if (this.props.new) {
             store.dispatch(addAlarm(newAlarm));
         } else {
             store.dispatch(changeAlarm(newAlarm.id, newAlarm));
         }
         Actions.pop();
-    }
-    
-    async saveKey(value) {
-        console.log('save key');
-        try {
-            await AsyncStorage.setItem('@MySuperStore:key', value);
-            console.log('key was saved');
-        } catch (error) {
-            console.log("Error saving data" + error);
-        }
     }
 
     render() {

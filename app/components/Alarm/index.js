@@ -5,12 +5,9 @@ import {
     View,
     Switch,
     ActivityIndicator,
-    Button,
     Text,
-    Animated,
     TouchableHighlight,
     ScrollView,
-    AsyncStorage
 } from 'react-native';
 
 import moment from 'moment';
@@ -21,11 +18,11 @@ import { Actions } from 'react-native-router-flux';
 
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import store from '../store';
-import * as ActionsRedux from '../actions';
+import store from '../../store';
+import * as ActionsRedux from '../../actions';
 
 import { gs , colorRed } from 'globalStyles';
-import NavBar from './NavBar';
+import NavBar from '../NavBar';
 
 class Alarm extends Component {
     constructor(props) {
@@ -47,6 +44,7 @@ class Alarm extends Component {
     }
 
     render() {
+        console.log(store.getState().dataReducer)
         return (
             <Container style={gs.container}>
                 <NavBar 
@@ -68,7 +66,9 @@ class Alarm extends Component {
                             
                             <FlatList
                                 ref='listRef'
-                                data={this.props.data}
+                                data={this.props.data.sort((a, b) => {
+                                    return moment(a.time).isBefore(moment(b.time)) ? -1 : 1;
+                                })}
                                 renderItem={this.renderItem}
                                 keyExtractor={(item, index) => {
                                     return item.id.toString()
@@ -86,7 +86,7 @@ class Alarm extends Component {
     }
 
     renderItem({item}) {
-        console.log(item.time, moment.utc(item.time).format('hh:mm'));
+        //console.log(item);
         return <AlarmItem {...item} offScroll={this.offScroll}/>
     }
 };

@@ -3,17 +3,15 @@ import {
     StyleSheet,
     Text,
     View,
-    TouchableHighlight,
-    Image
+    TouchableHighlight
 } from 'react-native';
 
 import { CheckBox } from 'react-native-elements';
-import { Container, Header, Title, Content, Left, Right, Body } from 'native-base';
+import { Container, Content } from 'native-base';
 import { Actions } from 'react-native-router-flux';
 
-
 import { gs } from 'globalStyles'
-import NavBar from './NavBar';
+import NavBar from '../NavBar';
 
 const repeatOption = [
     {

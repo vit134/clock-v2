@@ -11,10 +11,10 @@ import * as ActionsRedux from '../actions';
 
 import Time from '../components/Time';
 
-import Alarm from '../components/alarm';
-import AlarmAdd from '../components/alarmAdd';
-import AlarmTitleModal from '../components/alarmTitleModal';
-import AlarmRepeatModal from '../components/alarmRepeatModal';
+import Alarm from '../components/Alarm/';
+import AlarmAdd from '../components/Alarm/alarmAdd';
+import AlarmTitleModal from '../components/Alarm/alarmTitleModal';
+import AlarmRepeatModal from '../components/Alarm/alarmRepeatModal';
 
 import LoginHello from '../components/Login/LoginHello';
 import LoginStep1 from '../components/Login/LoginStep1';
