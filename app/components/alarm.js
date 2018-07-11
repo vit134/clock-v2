@@ -13,6 +13,8 @@ import {
     AsyncStorage
 } from 'react-native';
 
+import moment from 'moment';
+
 import { Container, Content, Icon } from 'native-base';
 import Swipeable from 'react-native-swipeable';
 import { Actions } from 'react-native-router-flux';
@@ -28,8 +30,8 @@ import NavBar from './NavBar';
 class Alarm extends Component {
     constructor(props) {
         super(props);
-        this.state = {};
-        this.unsubscribe = store.subscribe(() => {});
+        this.state = {isSwiping: true};
+        
         this.renderItem = this.renderItem.bind(this);
         this.offScroll = this.offScroll.bind(this);
     }
@@ -54,8 +56,9 @@ class Alarm extends Component {
                     leftTitle={'Change'}
                 />
                 { this.props.data.length > 0 
+                
                 ? 
-                    <ScrollView scrollEnabled={!this.state.isSwiping} style={{minHeight: '100%'}}>
+                    <ScrollView scrollEnabled={this.state.isSwiping}>
                         { this.props.loading 
                         ? 
                             <View style={styles.activityIndicatorContainer}>
@@ -82,7 +85,8 @@ class Alarm extends Component {
         )
     }
 
-    renderItem({item, index}) { 
+    renderItem({item}) {
+        console.log(item.time, moment.utc(item.time).format('hh:mm'));
         return <AlarmItem {...item} offScroll={this.offScroll}/>
     }
 };
@@ -118,8 +122,8 @@ class AlarmItem extends Component {
                 rightButtons={[<TouchableHighlight style={styles.swipeButtonRight} onPress={this.removeAlarm.bind(this)}><Text style={styles.swipeButtonText}>Delete</Text></TouchableHighlight>]} 
                 leftButtons={[<TouchableHighlight style={styles.swipeButtonLeft} onPress={this.changeAlarm.bind(this)}><Icon name={'ios-remove-circle'} style={{fontSize: 30, color: colorRed}} /></TouchableHighlight>]} 
                 rightButtonWidth={80}
-                onSwipeStart={() => this.props.offScroll(true)}
-                onSwipeRelease={() => this.props.offScroll(false)}
+                onSwipeStart={() => this.props.offScroll(false)}
+                onSwipeRelease={() => this.props.offScroll(true)}
             >
                 <View style={styles.alarmItem}>
                     <View>

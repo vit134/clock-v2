@@ -60,7 +60,6 @@ export function removeAlarm(id){
 
 export function changeAlarm(id, changingAlarm){
     return (dispatch) => {
-        console.log('actions change alarm', changingAlarm)
         dispatch({type: CHANGE_ALARM, id, changingAlarm});
     };
 }

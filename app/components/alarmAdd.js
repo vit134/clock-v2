@@ -124,7 +124,6 @@ class AlarmAdd extends Component {
         newAlarm.timeTitle = `${newAlarm.time.getHours()}:${newAlarm.time.getMinutes() < 10 ? `0${newAlarm.time.getMinutes()}` : newAlarm.time.getMinutes()}`
         if (this.props.new) {
             store.dispatch(addAlarm(newAlarm));
-            this.saveKey(newAlarm)
         } else {
             store.dispatch(changeAlarm(newAlarm.id, newAlarm));
         }
