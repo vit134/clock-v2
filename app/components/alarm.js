@@ -91,12 +91,17 @@ class AlarmItem extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            switchEnabled: this.props.enabled,
+            enabled: this.props.enabled,
+            ...this.props
         }
+
+        this.toggleSwitch = this.toggleSwitch.bind(this);
+        
     }
   
     toggleSwitch(value) {
-        this.setState({switchEnabled: value});
+        this.setState({enabled: value});
+        store.dispatch(ActionsRedux.changeAlarm(this.props.id, {...this.state, enabled: value}));
     }
 
     removeAlarm() {
@@ -118,11 +123,11 @@ class AlarmItem extends Component {
             >
                 <View style={styles.alarmItem}>
                     <View>
-                        <Text style={styles.alarmItemTime}>{this.props.timeTitle}</Text>
-                        <Text style={styles.alarmItemTitle}>{this.props.title} {this.props.repeatTitle ? `, ${this.props.repeatTitle}` : ''}</Text>
+                        <Text style={[styles.alarmItemTime, !this.state.enabled ? styles.alarmItemTimeNotActive: {}]}>{this.props.timeTitle}</Text>
+                        <Text style={[styles.alarmItemTitle, !this.state.enabled ? styles.alarmItemTimeNotActive: {}]}>{this.props.title} {this.props.repeatTitle ? `, ${this.props.repeatTitle}` : ''}</Text>
                     </View>
                     <View>
-                        <Switch style={styles.alarmItemSwitch} onValueChange={this.toggleSwitch.bind(this)} value = {this.state.switchEnabled}/>
+                        <Switch style={styles.alarmItemSwitch} onValueChange={(value) => this.toggleSwitch(value)} value={this.state.enabled}/>
                     </View>
                 </View>
             </Swipeable>
@@ -165,12 +170,14 @@ let styles = StyleSheet.create({
         fontWeight: 'bold',
         color: '#222'
     },
+    alarmItemTimeNotActive: {
+        color: '#c7c7c7'
+    },
     alarmItemTitle: {
         color: '#222'
     },
     alarmItemSwitch: {
-        marginTop: 10,
-        //transform: [{scaleX: 1}, {scaleY: 1.2}]
+        marginTop: 10
     },
     swipeButtonRight: {
         flex: 1,

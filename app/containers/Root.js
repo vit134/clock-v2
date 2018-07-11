@@ -87,13 +87,13 @@ class Root extends Component {
                                 navigationBarStyle={styles.navigationBarStyle} 
                                 labelStyle={styles.label}
                                 activeTintColor={colorRed}>
-                                <Scene  key="alarm" title="Alarm" iconName="ios-alarm" icon={TabIcon} >
+                                <Scene initial key="alarm" title="Alarm" iconName="ios-alarm" icon={TabIcon} >
                                     <Scene key="alarm" component={Alarm} title="Alarm" hideNavBar />
                                     <Scene key="alarmAdd" component={AlarmAdd} title="Add alarm" hideNavBar />
                                     <Scene key="alarmTitleModal" component={AlarmTitleModal} direction="vertical" title="Title" hideNavBar />
                                     <Scene key="alarmRepeatModal" component={AlarmRepeatModal} direction="vertical" hideNavBar />
                                 </Scene>
-                                <Scene initial key="settings" title="Settings" iconName="ios-settings" icon={TabIcon} hideNavBar>
+                                <Scene  key="settings" title="Settings" iconName="ios-settings" icon={TabIcon} hideNavBar>
                                     <Scene initial key="settings-all" component={Settings} title="Settings" />
                                     <Scene key="settingsUser" component={SettingsUser} title="User settings" back={true} hideNavBar={false}/>
                                     <Scene key="settingsTime" component={SettingsTime} title="User time" back={true} hideNavBar={false}/>
