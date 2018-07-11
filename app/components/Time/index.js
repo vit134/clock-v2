@@ -14,7 +14,7 @@ export default class Time extends Component {
         super();
 
         this.state = {
-            time: moment().format('HH:mm:ss')
+            time: moment()
         }
 
         this.updatetime = this.updatetime.bind(this)
@@ -22,16 +22,36 @@ export default class Time extends Component {
     }
 
     updatetime() {
-        setInterval(() => this.setState({time: moment().format('HH:mm:ss')}), 1000);
+        setInterval(() => this.setState({time: moment()}), 1000);
     }
 
     render() {
         return (
             <Container>
-                <View style={{flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#fff'}}>
-                    <Text style={{fontSize: 110, color: 'red', fontFamily: 'digital' }}>{this.state.time}</Text>
+                <View style={styles.container}>
+                    <Text style={styles.text}>{this.state.time.format('HH')}</Text>
+                    <Text style={styles.text}>:</Text>
+                    <Text style={styles.text}>{this.state.time.format('mm')}</Text>
+                    <Text style={styles.text}>:</Text>
+                    <Text style={styles.text}>{this.state.time.format('ss')}</Text>
                 </View>
             </Container>
         )
     }
 }
+
+let styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#fff',
+        flexDirection: 'row',
+        paddingHorizontal: 20
+    },
+    text: {
+        fontSize: 90,
+        color: 'red',
+        fontFamily: 'digital',
+    }
+})
