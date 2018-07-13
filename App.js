@@ -20,10 +20,6 @@ class App extends Component {
 
   componentDidMount() {
       Font.loadAsync({
-        'DSEG': require('./app/assets/fonts/DSEG7Classic-Regular.ttf'),
-        'DSEG-light': require('./app/assets/fonts/DSEG7Classic-Light.ttf'),
-        'DSEG-bold': require('./app/assets/fonts/DSEG7Classic-Bold.ttf'),
-        //'digital': require('./app/assets/fonts/digital-7.ttf')
         'digital': require('./app/assets/fonts/7segment.ttf')
       }).then(() => this.setState({loading: false}));
   }
