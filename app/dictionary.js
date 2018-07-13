@@ -13,7 +13,7 @@ export default {
         alarm: 'alarm',
         settings: 'settings',
         back: 'back',
-        next: 'v'
+        next: 'next'
         forward: 'forward',
         save: 'save'
     }
