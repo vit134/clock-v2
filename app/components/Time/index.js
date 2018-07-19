@@ -8,6 +8,7 @@ import {
 import moment from 'moment';
 
 import { Container, Content, Icon } from 'native-base';
+import NavBar from '../NavBar';
 
 export default class Time extends Component {
     constructor() {
@@ -28,6 +29,7 @@ export default class Time extends Component {
     render() {
         return (
             <Container>
+                <NavBar title={'Time'}/>
                 <View style={styles.container}>
                     <Text style={styles.text}>{this.state.time.format('HH')}</Text>
                     <Text style={styles.text}>:</Text>

@@ -35,6 +35,7 @@ class Alarm extends Component {
 
     componentDidMount() {
         this.props.getData();
+        this.props.getSettings();
     }
 
     offScroll(value) {
@@ -44,7 +45,8 @@ class Alarm extends Component {
     }
 
     render() {
-        console.log(store.getState().dataReducer)
+        const settings = this.props.appSettings;
+        console.log(this.props.appSettings);
         return (
             <Container style={gs.container}>
                 <NavBar 
@@ -86,7 +88,6 @@ class Alarm extends Component {
     }
 
     renderItem({item}) {
-        //console.log(item);
         return <AlarmItem {...item} offScroll={this.offScroll}/>
     }
 };
@@ -142,7 +143,8 @@ class AlarmItem extends Component {
 function mapStateToProps(state, props) {
     return {
         loading: state.dataReducer.loading,
-        data: state.dataReducer.data
+        data: state.dataReducer.data,
+        appSettings: state.settingsReducer
     }
 }
 
@@ -151,6 +153,12 @@ function mapDispatchToProps(dispatch) {
 }
 
 let styles = StyleSheet.create({
+    containerLight: {
+        backgroundColor: '#fff'
+    },
+    containerDark: {
+        backgroundColor: '#222'
+    },
     activityIndicatorContainer:{
         backgroundColor: "#fff",
         alignItems: 'center',

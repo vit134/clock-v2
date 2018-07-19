@@ -7,7 +7,7 @@ export const UPDATE_SETTINGS = 'UPDATE_SETTINGS';
 export const CHANGE_SETTINGS = 'CHANGE_SETTINGS';
 export const RESET_SETTINGS = 'RESET_SETTINGS';
 export const GET_HOME_SETTINGS = 'GET_HOME_SETTINGS';
-export const UPDATE_HOME_SETTINGS = 'UPDATE_HOME_SETTINGS';
+export const CHANGE_HOME_SETTINGS = 'UPDATE_HOME_SETTINGS';
 export const RESET_HOME_SETTINGS = 'RESET_HOME_SETTINGS';
 
 import { AsyncStorage } from 'react-native';
@@ -100,14 +100,16 @@ export function getHomeSettings(){
 
             if (!settings || !settings.userName) {
                 first = true;
-                settings = {};
             }
-
-            settings.first = first;
-            settings.loading = false;
 
             dispatch({type: GET_HOME_SETTINGS, homeSettings: {first, loading: false}});
         });
+    };
+}
+
+export function changeHomeSettings(newSetting, oldSettings){
+    return (dispatch) => {
+        dispatch({type: CHANGE_HOME_SETTINGS, newSetting});
     };
 }
 

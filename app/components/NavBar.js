@@ -4,7 +4,7 @@ import { StyleSheet, Button } from 'react-native';
 
 import { Actions } from 'react-native-router-flux';
 
-import { colorRed } from 'globalStyles';
+import { colorRed, theme } from 'globalStyles';
 
 export default class NavBar extends Component {
     constructor(props) {
@@ -12,13 +12,17 @@ export default class NavBar extends Component {
     }
 
     render() {
+        let barStyle = 'dark-content';
+        if (this.props.settings && this.props.settings.theme === 'dark') {
+            barStyle = 'light-content';
+        }
         return(
-            <Header style={styles.container}>
+            <Header iosBarStyle={barStyle} style={[styles.container, this.props.settings ? theme.bg[this.props.settings.theme] : {}]}>
                 <Left>
                     {this.props.leftTitle && <Button color={colorRed} onPress={this.props.leftAction ? this.props.leftAction : () => {}} title={this.props.leftTitle} />}
                 </Left>
                 <Body>
-                    <Title>{this.props.title}</Title>
+                    <Title style={this.props.settings ? theme.text[this.props.settings.theme] : {}}>{this.props.title}</Title>
                 </Body>
                 <Right>
                     {this.props.rightTitle && <Button color={colorRed} onPress={this.props.rightAction ? this.props.rightAction : () => {}} title={this.props.rightTitle} />}

@@ -89,7 +89,7 @@ class Root extends Component {
                                 navigationBarStyle={styles.navigationBarStyle} 
                                 labelStyle={styles.label}
                                 activeTintColor={colorRed}>
-                                <Scene initial key="time" title="Time" component={Time} iconName="ios-clock" icon={TabIcon} />
+                                <Scene initial key="time" title="Time" component={Time} iconName="ios-clock" icon={TabIcon} hideNavBar/>
                                 <Scene  key="alarm" title="Alarm" iconName="ios-alarm" icon={TabIcon} >
                                     <Scene key="alarm" component={Alarm} title="Alarm" hideNavBar />
                                     <Scene key="alarmAdd" component={AlarmAdd} title="Add alarm" hideNavBar />

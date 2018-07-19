@@ -6,10 +6,29 @@ import { StyleSheet } from 'react-native';
 
 export const colorRed = '#fc363b';
 
+export const theme = {
+    bg: {
+        light: {
+            backgroundColor: '#fff'
+        },
+        dark: {
+            backgroundColor: '#222'
+        }
+    },
+    text: {
+        light: {
+            color: '#222'
+        },
+        dark: {
+            color: '#eee'
+        }
+    }
+}
+
 export const gs = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#fff',
+        backgroundColor: '#fff'
     },
     navBarStyle: {
       paddingTop: 10,

@@ -11,7 +11,8 @@ import {
     UPDATE_SETTINGS, 
     CHANGE_SETTINGS, 
     RESET_SETTINGS,
-    GET_HOME_SETTINGS
+    GET_HOME_SETTINGS,
+    CHANGE_HOME_SETTINGS
 } from "../actions/";
  
 let dataState = { data: [], loading:true };
@@ -87,6 +88,9 @@ const homeSettingsReducer = (state = homeState, action) => {
     switch (action.type) {
         case GET_HOME_SETTINGS:
             state = Object.assign({}, state, {...action.homeSettings, loading: false});
+            return state;
+        case CHANGE_HOME_SETTINGS:
+            state = Object.assign({}, state, {...action.newSetting});
             return state;
         default:
             return state;

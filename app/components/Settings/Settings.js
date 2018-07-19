@@ -6,7 +6,8 @@ import {
     AsyncStorage,
     Alert,
     TouchableHighlight,
-    Switch
+    Switch,
+    StatusBar
 } from 'react-native';
 import { Font } from 'expo';
 import { Container, Content, Icon, List, ListItem, Left, Right, Separator, Body, Picker, Thumbnail } from 'native-base';
@@ -18,7 +19,7 @@ import { bindActionCreators } from 'redux';
 import * as ActionsRedux from '../../actions';
 import store from '../../store';
 
-import { gs, colorRed } from 'globalStyles';
+import { gs, colorRed, theme } from 'globalStyles';
 import NavBar from '../NavBar';
 
 class Settings extends Component {
@@ -31,14 +32,16 @@ class Settings extends Component {
         this.resetAlert = this.resetAlert.bind(this);
     }
 
-    changeState(key, value) {
+    changeState(key, value, settingType) {
         this.setState({
             [key]: value
         });
         
         store.dispatch(ActionsRedux.changeSettings({[key]: value}, store.getState().settingsReducer));
 
-        console.log(store.getState())
+        /* if (settingType) {
+            store.dispatch(ActionsRedux.changeHomeSettings({[key]: value}, store.getState().settingsReducer))
+        } */
     }
 
     resetAlert() {
@@ -66,22 +69,23 @@ class Settings extends Component {
         const settings = this.props.settings;
         
         return (
-            <Container style={gs.container}>
-                <NavBar title={'Settings'} />
+            <Container style={[gs.container, theme.bg[settings.theme]]}>
+                <StatusBar translucent backgroundColor={'#fff'}  barStyle="light-content"/>
+                <NavBar title={'Settings'} settings={settings}/>
                 <Content>
                     <TouchableHighlight onPress={() => Actions.settingsUser()}>
                         <View style={styles.user}>
                             <View style={styles.userBox}><Thumbnail square source={require('./default_avatar.png')} /></View>
-                            <View style={[styles.userBox, styles.userBody]}><Text style={styles.userText}>{settings.userName}</Text></View>
+                            <View style={[styles.userBox, styles.userBody]}><Text style={[styles.userText, theme.text[settings.theme]]}>{settings.userName}</Text></View>
                             <View style={[styles.userBox, styles.userRight]}><Icon name="arrow-forward" style={{color: colorRed, marginRight: 3}}/></View>
                         </View>
                     </TouchableHighlight>
                     <List>
-                        <Separator bordered style={[styles.separator, styles.separatorNoBorderTop]}>
-                            <Text style={styles.separatorTitle}>App</Text>
+                        <Separator bordered style={[styles.separator, styles.separatorNoBorderTop,  theme.bg[settings.theme]]}>
+                            <Text style={[styles.separatorTitle, theme.text[settings.theme]]}>App</Text>
                         </Separator>
                         <ListItem picker style={styles.listItemPicker}>
-                            <Left><Text>Color theme</Text></Left>
+                            <Left><Text style={theme.text[settings.theme]}>Color theme</Text></Left>
                             <Right>
                                 <Picker
                                     mode="dropdown"
@@ -89,11 +93,11 @@ class Settings extends Component {
                                     style={styles.picker}
                                     headerStyle={styles.pickerHeader}
                                     placeholder="Light"
-                                    placeholderStyle={styles.pickerPlaceholder}
-                                    textStyle={styles.pickerText}
+                                    placeholderStyle={[styles.pickerPlaceholder, theme.text[settings.theme]]}
+                                    textStyle={[styles.pickerText, theme.text[settings.theme]]}
                                     placeholderIconColor="#007aff"
                                     selectedValue={settings.theme}
-                                    onValueChange={(value) => this.changeState('theme', value)}
+                                    onValueChange={(value) => this.changeState('theme', value, 'home')}
                                 >
                                     <Picker.Item label="Light" value="light" />
                                     <Picker.Item label="Dark" value="dark" />
@@ -101,7 +105,7 @@ class Settings extends Component {
                             </Right>
                         </ListItem>
                         <ListItem picker style={styles.listItemPicker}>
-                            <Left><Text>Language</Text></Left>
+                            <Left><Text style={theme.text[settings.theme]}>Language</Text></Left>
                             <Right>
                                 <Picker
                                     mode="dropdown"
@@ -109,8 +113,8 @@ class Settings extends Component {
                                     style={styles.picker}
                                     headerStyle={styles.pickerHeader}
                                     placeholder="Ru"
-                                    placeholderStyle={styles.pickerPlaceholder}
-                                    textStyle={styles.pickerText}
+                                    placeholderStyle={[styles.pickerPlaceholder, theme.text[settings.theme]]}
+                                    textStyle={[styles.pickerText, theme.text[settings.theme]]}
                                     placeholderIconColor="#007aff"
                                     selectedValue={settings.language}
                                     onValueChange={(value) => this.changeState('language', value)}
@@ -121,18 +125,18 @@ class Settings extends Component {
                             </Right>
                         </ListItem>
                         <ListItem onPress={this.resetAlert} style={{borderBottomWidth: 0}}>
-                            <Left><Text>Reset settings</Text></Left>
+                            <Left><Text style={theme.text[settings.theme]}>Reset settings</Text></Left>
                             <Right><Icon name="alert" style={{color: colorRed}}/></Right>
                         </ListItem>
-                        <Separator bordered style={styles.separator}>
-                            <Text style={styles.separatorTitle}>Clock</Text>
+                        <Separator bordered style={[styles.separator, theme.bg[settings.theme]]}>
+                            <Text style={[styles.separatorTitle, theme.text[settings.theme]]}>Clock</Text>
                         </Separator>
                         <ListItem onPress={() => Actions.settingsTime()}>
-                            <Left><Text>Time</Text></Left>
+                            <Left><Text style={theme.text[settings.theme]}>Time</Text></Left>
                             <Right><Icon name="arrow-forward" style={{color: colorRed, marginRight: 3}}/></Right>
                         </ListItem>
                         <ListItem picker style={styles.listItemPicker}>
-                            <Left><Text>Time format</Text></Left>
+                            <Left><Text style={theme.text[settings.theme]}>Time format</Text></Left>
                             <Right>
                                 <Picker
                                     mode="dropdown"
@@ -140,8 +144,8 @@ class Settings extends Component {
                                     style={styles.picker}
                                     headerStyle={styles.pickerHeader}
                                     placeholder="24H"
-                                    placeholderStyle={styles.pickerPlaceholder}
-                                    textStyle={styles.pickerText}
+                                    placeholderStyle={[styles.pickerPlaceholder, theme.text[settings.theme]]}
+                                    textStyle={[styles.pickerText, theme.text[settings.theme]]}
                                     placeholderIconColor="#007aff"
                                     selectedValue={settings.timeFormat}
                                     onValueChange={(value) => this.changeState('timeFormat', value)}
@@ -152,21 +156,21 @@ class Settings extends Component {
                             </Right>
                         </ListItem>
                         <ListItem onPress={() => Actions.settingsFontColor()}>
-                            <Left><Text>Font color</Text></Left>
+                            <Left><Text style={theme.text[settings.theme]}>Font color</Text></Left>
                             <Right style={{display: 'flex', flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center' }}>
                                 <View style={{width: 20, height: 20, marginRight: 10, borderRadius: 50, backgroundColor: `#${settings.fontColor || '222'}`}}></View>
                                 <Icon name="arrow-forward" style={{color: colorRed, marginRight: 3}}/>
                             </Right>
                         </ListItem>
                         <ListItem onPress={() => Actions.settingsBrightness()}>
-                            <Left><Text>Brightness</Text></Left>
+                            <Left><Text style={theme.text[settings.theme]}>Brightness</Text></Left>
                             <Right style={{display: 'flex', flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center' }}>
                                 <Text style={{marginRight: 10, fontSize: 16.5}}>{settings.brightness || 60}</Text>
                                 <Icon name="arrow-forward" style={{color: colorRed, marginRight: 3}}/>
                             </Right>
                         </ListItem>
                         <ListItem>
-                            <Left><Text>Quiet mode</Text></Left>
+                            <Left><Text style={theme.text[settings.theme]}>Quiet mode</Text></Left>
                             <Right><Switch onValueChange={(value) => this.changeState('quiet_mode', value)} value={settings.quiet_mode}/></Right>
                         </ListItem>
                     </List>
@@ -177,7 +181,7 @@ class Settings extends Component {
 }
 
 function mapStateToProps(state, props) {
-    return {settings: {...state.settingsReducer}};
+    return {settings: {...state.settingsReducer, ...state.homeSettingsReducer}};
 }
 
 function mapDispatchToProps(dispatch) {
@@ -185,6 +189,12 @@ function mapDispatchToProps(dispatch) {
 }
 
 const styles = StyleSheet.create({
+    containerLight: {
+        backgroundColor: '#fff'
+    },
+    containerDark: {
+        backgroundColor: '#222'
+    },
     separator: {
         height: 40
     },
@@ -219,7 +229,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 15,
         paddingVertical: 20,
         marginBottom: 30,
-        borderColor: '#eee',
+        borderColor: '#c9c9c9',
         borderBottomWidth: 1
     },
     userBox: {
